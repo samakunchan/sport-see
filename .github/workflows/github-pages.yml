@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - 'developpement'
+
+name: 🚀 [PUSH] Workflow pour le build et le deploiement vers github pages
+jobs:
+  vers-github-pages:
+    name: 🛂 Vers Github Pages
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 Bravo 🎉. Le job se lance sur l'évènement ${{ github.event_name }}."
+      - run: echo "Le nom de la branche est ${{ github.ref }} et le nom du repository est ${{ github.repository }}."
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+
+      - name: 💿 Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: 📚 Installation des dépendances
+        run: |
+          npm install
+
+      - name: 🔨 Construction du projet
+        run: |
+          npm run build
+
+      - name: 🛂 Deploiement du projet
+        run: |
+          npm run deploy

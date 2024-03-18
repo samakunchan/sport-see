@@ -1,0 +1,24 @@
+{
+  "extends": "react-app",
+  "rules": {
+    "no-console": "warn",
+    "max-len": ["error", { "code": 120 }],
+    "curly": "error",
+    "prefer-const": ["error", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }],
+    "sort-imports": ["error", {
+      "ignoreCase": false,
+      "ignoreDeclarationSort": false,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+      "allowSeparatedGroups": false
+    }],
+    "prefer-template": "error",
+    "prefer-spread": "error",
+    "prefer-object-spread": "error",
+    "object-shorthand": "error",
+    "yoda": "error"
+  }
+}

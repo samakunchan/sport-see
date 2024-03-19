@@ -1,0 +1,27 @@
+@use "src/styles/abstracts";
+
+header {
+  background-color: abstracts.$secondary;
+  padding: 1em 2em;
+
+  nav {
+    display: flex;
+
+    img {
+      width: 11em;
+      object-fit: contain;
+    }
+
+    ul {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      li {
+        color: white;
+        font-size: 1.5em;
+      }
+    }
+  }
+}

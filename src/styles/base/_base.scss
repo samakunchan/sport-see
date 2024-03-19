@@ -1,12 +1,22 @@
 @use "../abstracts";
 
+body {
+  margin: 0;
+  font-weight: abstracts.$fontWeight500;
+}
+
+p {
+  &.announcement {
+    font-weight: abstracts.$fontWeight400;
+  }
+}
+
 li {
   list-style: none;
 }
 
 a {
   text-decoration: none;
-  font-weight: abstracts.$fontWeightTitle;
 }
 
 section {

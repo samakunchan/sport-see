@@ -1,0 +1,25 @@
+// Colours
+$primary: #FF0000;
+$secondary: #000000;
+
+// Typography
+$fontWeightTitle: 700;
+$fontWeightNormal: 500;
+$fontMontserrat: 'Montserrat', Arial, Helvetica, sans-serif;
+$fontMSourceCodePro: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+
+/// Break points
+$breakpoints: (
+        'small': (max-width: 768px),
+        'medium': (max-width: 1024px),
+        'large': (max-width: 1440px),
+);
+
+// Sélectionner le format 'large'
+$large_breakpoint: map-get($breakpoints, 'large');
+
+// Border radius
+$defaultSmallRadius: .65em;
+
+// Animations
+$defaultDurationAnimation: .3s

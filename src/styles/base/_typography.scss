@@ -1,0 +1,13 @@
+@use "../abstracts";
+
+body {
+  font-family: abstracts.$fontMontserrat;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+}
+
+code {
+  font-family: abstracts.$fontMSourceCodePro;
+}

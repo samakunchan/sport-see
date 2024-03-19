@@ -1,0 +1,26 @@
+@use "./animations";
+@use "./variables";
+
+/// Responsive breakpoint manager
+/// @access public
+/// @param {String} $breakpoint - Breakpoint
+/// @requires $breakpoints
+@mixin respond-to($breakpoint) {
+  $raw-query: map-get(variables.$breakpoints, $breakpoint);
+
+  @if $raw-query {
+    $query: if(type-of($raw-query) == 'string', unquote($raw-query), inspect($raw-query));
+
+    @media #{$query} {
+      @content;
+    }
+  } @else {
+    $accept-break-points: map-keys(variables.$breakpoints);
+    @error 'No value found for `#{$breakpoint}`. Accept only: #{$accept-break-points}.';
+  }
+}
+
+/// @access public
+@mixin borderRadius {
+  border-radius: variables.$defaultSmallRadius;
+}

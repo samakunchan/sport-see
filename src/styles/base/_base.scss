@@ -1,0 +1,14 @@
+@use "../abstracts";
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  font-weight: abstracts.$fontWeightTitle;
+}
+
+section {
+  margin: 1em auto;
+}

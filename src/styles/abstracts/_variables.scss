@@ -21,7 +21,10 @@ $breakpoints: (
 $large_breakpoint: map-get($breakpoints, 'large');
 
 // Border radius
-$defaultSmallRadius: .65em;
+$defaultSmallRadius: .35em;
 
 // Animations
-$defaultDurationAnimation: .3s
+$defaultDurationAnimation: .3s;
+
+// Layout
+$spaceContent: 4em;

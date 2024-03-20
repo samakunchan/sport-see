@@ -1,3 +1,4 @@
+import '../utils/utils';
 import { MenuBase } from './bases/menu-base';
 
 export class ToolbarMenuModel extends MenuBase {
@@ -11,6 +12,6 @@ export class ToolbarMenuModel extends MenuBase {
    * @return {string}
    */
   get label() {
-    return this._label;
+    return this._label.ucFirst();
   }
 }

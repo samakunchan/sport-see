@@ -1,5 +1,5 @@
 import './index.scss';
-import {sideBarMenusDatas} from '../../../core/utils/menus-datas';
+import { sideBarMenusDatas } from '../../../core/utils/menus-datas';
 
 /**
  * Créer une liste de menu

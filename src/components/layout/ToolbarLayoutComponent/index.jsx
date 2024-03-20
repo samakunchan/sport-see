@@ -1,6 +1,6 @@
 import './index.scss';
 import logo from '../../../assets/images/logo.png';
-import {toolBarMenusDatas} from '../../../core/utils/menus-datas';
+import { toolBarMenusDatas } from '../../../core/utils/menus-datas';
 
 /**
  * Créer une liste de menu

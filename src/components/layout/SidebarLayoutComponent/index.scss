@@ -1,0 +1,35 @@
+@use "src/styles/abstracts";
+
+.side-nav {
+  background-color: abstracts.$secondary;
+  text-align: center;
+  //min-width: abstracts.$spaceContent;
+
+  ul {
+    min-width: 6em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    height: 100%;
+    margin: 0;
+
+    li {
+      margin: 1em;
+      background-color: white;
+      width: 64px;
+      height: 64px;
+      position: relative;
+      @include abstracts.borderRadius();
+
+      img {
+        object-fit: contain;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+}

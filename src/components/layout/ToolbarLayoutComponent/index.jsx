@@ -4,16 +4,15 @@ import {toolBarMenusDatas} from '../../../core/utils/menus-datas';
 
 /**
  * Créer une liste de menu
- * @param label {string}
- * @param index {number}
+ * @param menu {ToolbarMenuModel}
  * @return {JSX.Element}
  */
-const buildMenu = ({ label }, index) => <li key={index}>{label}</li>;
+const buildMenu = menu => <li key={menu.id}>{menu.label}</li>;
 
 const ToolbarLayoutComponent = () => {
   return (
     <header>
-      <nav>
+      <nav className={'top-nav'}>
         <img src={logo} alt='Logo SportSee' />
         <ul>{toolBarMenusDatas.map(buildMenu)}</ul>
       </nav>

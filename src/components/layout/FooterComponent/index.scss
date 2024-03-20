@@ -1,7 +1,9 @@
+@use "src/styles/abstracts";
+
 footer {
   position: absolute;
   transform: rotate(270deg);
-  color: white;
+  color: abstracts.$default;
   bottom: 10dvh;
   left: -2.75em;
 }

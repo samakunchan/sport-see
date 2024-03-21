@@ -1,4 +1,5 @@
 import './index.scss';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
 import LayoutComponent from './components/layout/LayoutComponent';
 import React from 'react';
@@ -7,11 +8,15 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <LayoutComponent>
-      <DashboardPage />
-    </LayoutComponent>
-  </React.StrictMode>,
+  <>
+    <Router>
+      <LayoutComponent>
+        <Routes>
+          <Route path='/user/:id' element={<DashboardPage />} />
+        </Routes>
+      </LayoutComponent>
+    </Router>
+  </>,
 );
 
 // If you want to start measuring performance in your app, pass a function

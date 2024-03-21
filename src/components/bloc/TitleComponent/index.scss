@@ -1,0 +1,8 @@
+@use "src/styles/abstracts";
+
+.user-title {
+  font-size: 48px;
+  .firstname {
+    color: abstracts.$primary;
+  }
+}

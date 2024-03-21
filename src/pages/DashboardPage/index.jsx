@@ -1,6 +1,7 @@
 import './index.scss';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import TitleComponent from '../../components/bloc/TitleComponent';
 import { UserModel } from '../../core/models/user-model';
 import UsersService from '../../core/services/users-service';
 
@@ -18,11 +19,9 @@ const DashboardPage = () => {
   }, [id, navigate]);
 
   return (
-    user && (
-      <section>
-        <h1>{user.userInfos.firstName}</h1>
-      </section>
-    )
+    <section>
+      <TitleComponent user={user} />
+    </section>
   );
 };
 

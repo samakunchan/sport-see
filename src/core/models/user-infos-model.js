@@ -10,20 +10,20 @@ export class UserInfosModel {
    * @return {string}
    */
   get firstName() {
-    return this._firstName;
+    return this._firstName ?? `[utilisateur]`;
   }
 
   /**
    * @return {string}
    */
   get lastName() {
-    return this._lastName;
+    return this._lastName ?? `[utilisateur]`;
   }
 
   /**
    * @return {number}
    */
   get age() {
-    return this._age;
+    return this._age ?? 0;
   }
 }

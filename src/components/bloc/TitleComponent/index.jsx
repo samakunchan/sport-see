@@ -1,13 +1,10 @@
 import './index.scss';
 
 const TitleComponent = ({ user }) => {
-  return user ? (
+  return (
     <h1 className={'user-title'}>
-      Bonjour <span className={'firstname'}>{user.userInfos.firstName}</span>
-    </h1>
-  ) : (
-    <h1 className={'user-title'}>
-      Bonjour <span className={'firstname'}>[utilisateur]</span>
+      Bonjour
+      <span className={'firstname'}> {user ? user.userInfos.firstName : `[utilisateur]`}</span>
     </h1>
   );
 };

@@ -1,16 +1,16 @@
 import './index.scss';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ActivityModel } from '../../core/models/activity/activity-model';
 import CardComponent from '../../components/bloc/CardComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
 import TitleComponent from '../../components/bloc/TitleComponent';
-import { UserActivityModel } from '../../core/models/user-activity-model';
-import { UserModel } from '../../core/models/user-model';
+import { UserModel } from '../../core/models/user/user-model';
 import UsersService from '../../core/services/users-service';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(UserModel.null);
-  const [activity, setActivity] = useState(UserActivityModel.null);
+  const [activity, setActivity] = useState(ActivityModel.null);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -27,7 +27,7 @@ const DashboardPage = () => {
     userService
       .getOneUserActivityById(id) // 12 et 18
       .then(setActivity)
-      .catch(() => setActivity(UserActivityModel.null));
+      .catch(() => setActivity(ActivityModel.null));
   }, [id, navigate]);
 
   return (
@@ -38,7 +38,7 @@ const DashboardPage = () => {
       />
       <div>
         <section>
-          <h2>Activité de l'utilisateur n°{activity.userId}</h2>
+          {activity && <h2>Activité de l'utilisateur n°{activity.userId}</h2>}
           <CardComponent />
           <div>
             <CardComponent />

@@ -1,6 +1,6 @@
 import { SessionModel } from './session-model';
 
-export class UserActivityModel {
+export class ActivityModel {
   constructor(activity) {
     const { userId, sessions } = activity;
     this._userId = userId;
@@ -24,14 +24,14 @@ export class UserActivityModel {
   /**
    * Pour transformer les données de l'API en objet
    * @param records
-   * @return {UserActivityModel}
+   * @return {ActivityModel}
    */
   static mapRecords(records) {
-    return new UserActivityModel(records['data']);
+    return new ActivityModel(records['data']);
   }
 
   /**
-   * @return {UserActivityModel}
+   * @return {ActivityModel}
    */
   static get null() {
     return null;

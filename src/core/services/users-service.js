@@ -1,7 +1,7 @@
 import { ErrorUtil, HttpErrorStatusCode } from '../utils/error-util';
+import { ActivityModel } from '../models/activity/activity-model';
 import { ErrorModel } from '../models/error-model';
-import { UserActivityModel } from '../models/user-activity-model';
-import { UserModel } from '../models/user-model';
+import { UserModel } from '../models/user/user-model';
 
 class UsersService {
   /**
@@ -17,12 +17,12 @@ class UsersService {
 
   /**
    * @param id
-   * @return {Promise<UserActivityModel | ErrorModel>}
+   * @return {Promise<ActivityModel | ErrorModel>}
    */
   getOneUserActivityById(id) {
     return fetch(`http://localhost:3005/users/${id}/activity`)
       .then(this._getJson)
-      .then(response => UserActivityModel.mapRecords(response))
+      .then(response => ActivityModel.mapRecords(response))
       .catch(this._catchErrorAndReturnErrorModel);
   }
 

@@ -5,6 +5,7 @@ import { ActivityModel } from '../../core/models/activity/activity-model';
 import { AverageSessionModel } from '../../core/models/average-session/average-session-model';
 import CardComponent from '../../components/bloc/CardComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
+import { PerformancesModel } from '../../core/models/performances/performances-model';
 import TitleComponent from '../../components/bloc/TitleComponent';
 import { UserModel } from '../../core/models/user/user-model';
 import UsersService from '../../core/services/users-service';
@@ -13,6 +14,7 @@ const DashboardPage = () => {
   const [user, setUser] = useState(UserModel.null);
   const [activity, setActivity] = useState(ActivityModel.null);
   const [averageSession, setAverageSession] = useState(AverageSessionModel.null);
+  const [performance, setPerformance] = useState(PerformancesModel.null);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -40,6 +42,14 @@ const DashboardPage = () => {
       .catch(() => setAverageSession(AverageSessionModel.null));
   }, [id, navigate]);
 
+  useEffect(() => {
+    const userService = new UsersService();
+    userService
+      .getOneUserPerformanceById(id) // 12 et 18
+      .then(setPerformance)
+      .catch(() => setPerformance(PerformancesModel.null));
+  }, [id, navigate]);
+
   return (
     <section>
       <TitleComponent user={user} />
@@ -50,6 +60,7 @@ const DashboardPage = () => {
         <section>
           {activity && <h2>Activité de l'utilisateur n°{activity.userId}</h2>}
           {averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}
+          {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
           <CardComponent />
           <div>
             <CardComponent />

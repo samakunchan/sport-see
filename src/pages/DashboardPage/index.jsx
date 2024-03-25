@@ -38,6 +38,7 @@ const DashboardPage = () => {
       />
       <div>
         <section>
+          <h2>Activité de l'utilisateur n°{activity.userId}</h2>
           <CardComponent />
           <div>
             <CardComponent />

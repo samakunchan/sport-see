@@ -1,5 +1,6 @@
 import { ErrorUtil, HttpErrorStatusCode } from '../utils/error-util';
 import { ActivityModel } from '../models/activity/activity-model';
+import { AverageSessionModel } from '../models/average-session/average-session-model';
 import { ErrorModel } from '../models/error-model';
 import { UserModel } from '../models/user/user-model';
 
@@ -23,6 +24,17 @@ class UsersService {
     return fetch(`http://localhost:3005/users/${id}/activity`)
       .then(this._getJson)
       .then(response => ActivityModel.mapRecords(response))
+      .catch(this._catchErrorAndReturnErrorModel);
+  }
+
+  /**
+   * @param id
+   * @return {Promise<AverageSessionModel | ErrorModel>}
+   */
+  getOneUserAverageSessionById(id) {
+    return fetch(`http://localhost:3005/users/${id}/average-sessions`)
+      .then(this._getJson)
+      .then(response => AverageSessionModel.mapRecords(response))
       .catch(this._catchErrorAndReturnErrorModel);
   }
 

@@ -10,7 +10,7 @@ class UsersService {
   getOneUserById(id) {
     return fetch(`http://localhost:3005/users/${id}`)
       .then(this._getJson)
-      .then(response => this._mapRecords(response))
+      .then(response => UserModel.mapRecords(response))
       .catch(this._catchErrorAndReturnErrorModel);
   }
 
@@ -23,14 +23,6 @@ class UsersService {
       throw response;
     }
     return response.json();
-  }
-
-  /**
-   * @param records
-   * @return {UserModel}
-   */
-  _mapRecords(records) {
-    return new UserModel(records['data']);
   }
 
   /**

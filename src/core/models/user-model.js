@@ -50,6 +50,15 @@ export class UserModel {
   }
 
   /**
+   * Pour transformer les données de l'API en objet
+   * @param records
+   * @return {UserModel}
+   */
+  static mapRecords(records) {
+    return new UserModel(records['data']);
+  }
+
+  /**
    * @return {UserModel}
    */
   static get null() {

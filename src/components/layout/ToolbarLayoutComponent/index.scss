@@ -2,7 +2,7 @@
 
 header {
   background-color: abstracts.$secondary;
-  padding: 1em 2em;
+  padding: 1em 0;
   position: absolute;
   top: 0;
   width: 100%;
@@ -15,6 +15,7 @@ header {
     img {
       width: 11em;
       object-fit: contain;
+      margin: 0 1.5em;
     }
 
     ul {

@@ -1,4 +1,24 @@
+/**
+ * Crée une instance de MenuBase.
+ * @class
+ * @param {
+ * {calorieCount: number},
+ * {proteinCount: number},
+ * {carbohydrateCount: number},
+ * {lipidCount: number}
+ * } data - Les infos clés sur les protéines, calories, glucide et lipide.
+ * @returns {MenuBase} Une instance de MenuBase.
+ */
 export class KeydataModel {
+  /**
+   * @param {
+   * {calorieCount: number},
+   * {proteinCount: number},
+   * {carbohydrateCount: number},
+   * {lipidCount: number}
+   * } data - Les infos clés sur les protéines, calories, glucide et lipide.
+   * @param data
+   */
   constructor(data) {
     const { calorieCount, proteinCount, carbohydrateCount, lipidCount } = data;
     this._calorieCount = calorieCount;
@@ -8,30 +28,30 @@ export class KeydataModel {
   }
 
   /**
-   * @return {number}
+   * @return {string}
    */
   get calorieCount() {
-    return this._calorieCount;
+    return `${(this._calorieCount / 1000).toFixed(3)}kCal`;
   }
 
   /**
-   * @return {number}
+   * @return {string}
    */
   get proteinCount() {
-    return this._proteinCount;
+    return `${this._proteinCount}g`;
   }
 
   /**
-   * @return {number}
+   * @return {string}
    */
   get carbohydrateCount() {
-    return this._carbohydrateCount;
+    return `${this._carbohydrateCount}g`;
   }
 
   /**
-   * @return {number}
+   * @return {string}
    */
   get lipidCount() {
-    return this._lipidCount;
+    return `${this._lipidCount}g`;
   }
 }

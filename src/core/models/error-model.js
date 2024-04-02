@@ -30,4 +30,11 @@ export class ErrorModel {
       message: ErrorUtil.messageNotFound,
     });
   }
+
+  /**
+   * @return {ErrorModel}
+   */
+  static get null() {
+    return null;
+  }
 }

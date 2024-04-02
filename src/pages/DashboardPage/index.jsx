@@ -62,36 +62,30 @@ const DashboardPage = () => {
           {averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}
           {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
         </div>
-        <aside>
-          {user && (
+        {user && (
+          <aside>
             <CardComponent
               src={'/sport-see/assets/svg/calories-icon.svg'}
               title={'Calories'}
               data={user.keyData.calorieCount}
             />
-          )}
-          {user && (
             <CardComponent
               src={'/sport-see/assets/svg/protein-icon.svg'}
               title={'Protéines'}
               data={user.keyData.proteinCount}
             />
-          )}
-          {user && (
             <CardComponent
               src={'/sport-see/assets/svg/carbs-icon.svg'}
               title={'Glucides'}
               data={user.keyData.carbohydrateCount}
             />
-          )}
-          {user && (
             <CardComponent
               src={'/sport-see/assets/svg/fat-icon.svg'}
               title={'Lupides'}
               data={user.keyData.lipidCount}
             />
-          )}
-        </aside>
+          </aside>
+        )}
       </div>
     </section>
   );

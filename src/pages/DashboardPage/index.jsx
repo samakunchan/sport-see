@@ -24,11 +24,7 @@ const DashboardPage = () => {
     userService
       .getOneUserById(id) // 12 et 18
       .then(setUser)
-      .catch(error => {
-        console.info(`Mon status code : ${error.statusCode}`);
-        console.info(`Mon message : ${error.message}`);
-        setUser(UserModel.null);
-      });
+      .catch(() => setUser(UserModel.null));
 
     userService
       .getOneUserActivityById(id) // 12 et 18

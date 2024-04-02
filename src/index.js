@@ -1,5 +1,5 @@
 import './index.scss';
-import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
 import LayoutComponent from './components/layout/LayoutComponent';
 import React from 'react';

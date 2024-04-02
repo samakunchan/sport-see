@@ -1,8 +1,9 @@
 import './index.scss';
 import { ErrorUtil, HttpErrorStatusCode } from '../../../core/utils/error-util';
 import React, { useEffect, useState } from 'react';
+import ErrorPage from '../../../pages/ErrorPage';
 import FooterComponent from '../FooterComponent';
-import { Link } from 'react-router-dom';
+import OptionalLinksComponent from '../OptionalLinksComponent';
 import SidebarLayoutComponent from '../SidebarLayoutComponent';
 import ToolbarLayoutComponent from '../ToolbarLayoutComponent';
 import UsersService from '../../../core/services/users-service';
@@ -22,15 +23,12 @@ const LayoutComponent = ({ children }) => {
         <SidebarLayoutComponent />
         {status.statusCode !== HttpErrorStatusCode.serverOffline ? (
           <section className={'content'}>
-            <div>
-              <Link to={'/user/12'}>Karl</Link>
-              <Link to={'/user/18'}>Cécilia</Link>
-            </div>
+            <OptionalLinksComponent />
             {children}
           </section>
         ) : (
           <section className={'content'}>
-            <h1>{ErrorUtil.serverIsOffline}</h1>
+            <ErrorPage message={ErrorUtil.serverIsOffline} />
           </section>
         )}
         <FooterComponent />

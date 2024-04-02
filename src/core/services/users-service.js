@@ -6,8 +6,12 @@ import { PerformancesModel } from '../models/performances/performances-model';
 import { UserModel } from '../models/user/user-model';
 
 class UsersService {
+  /**
+   * Vérifie si l'API est en ligne ou pas.
+   * @return {Promise<* | ErrorModel>}
+   */
   testApi() {
-    return fetch('http://localhost:3005')
+    return fetch('http://localhost:3005/users')
       .then(this._getJson)
       .catch(this._catchErrorAndReturnErrorModel);
   }

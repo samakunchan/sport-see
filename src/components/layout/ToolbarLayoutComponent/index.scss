@@ -15,7 +15,7 @@ header {
     img {
       width: 11em;
       object-fit: contain;
-      margin: 0 1.5em;
+      margin: 0 abstracts.$fontSizeHigh;
     }
 
     ul {
@@ -26,7 +26,7 @@ header {
 
       li {
         color: abstracts.$default;;
-        font-size: 1.5em;
+        font-size: abstracts.$fontSizeHigh;
       }
     }
   }

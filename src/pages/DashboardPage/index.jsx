@@ -58,8 +58,9 @@ const DashboardPage = () => {
       <div className={'graph-container'}>
         <div className={'graphs'}>
           {/*<HistogramComponent />*/}
-          {/*{averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}*/}
-          {/*{performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}*/}
+          {activity && <h2>Activité de l'utilisateur n°{activity.userId}</h2>}
+          {averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}
+          {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
         </div>
         <aside>
           {user && (

@@ -1,9 +1,15 @@
 export class ErrorUtil {
   /**
-   * Message : <br> Oups! La page que vous demandez n'existe pas.
+   * Message : <br> Le serveur n'est pas en ligne.
    * @type {string}
    */
-  static messageNotFound = `Oups! La page que vous demandez n'existe pas.`;
+  static serverIsOffline = `Le serveur n'est pas en ligne.`;
+
+  /**
+   * Message : <br> Oups! Les données que vous cherchez n'existe pas.
+   * @type {string}
+   */
+  static messageNotFound = `Oups! Les données que vous cherchez n'existe pas.`;
 }
 
 export class HttpErrorStatusCode {
@@ -12,6 +18,12 @@ export class HttpErrorStatusCode {
    * @type {number}
    */
   static default = 400;
+
+  /**
+   * StatusCode : 500.
+   * @type {number}
+   */
+  static serverOffline = 500;
 
   /**
    * StatusCode : 404.

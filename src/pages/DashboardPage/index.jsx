@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ActivityModel } from '../../core/models/activity/activity-model';
 import { AverageSessionModel } from '../../core/models/average-session/average-session-model';
 import CardComponent from '../../components/bloc/CardComponent';
+import HistogramComponent from '../../components/bloc/HistogramComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
 import { PerformancesModel } from '../../core/models/performances/performances-model';
 import TitleComponent from '../../components/bloc/TitleComponent';
@@ -23,27 +24,22 @@ const DashboardPage = () => {
     userService
       .getOneUserById(id) // 12 et 18
       .then(setUser)
-      .catch(() => setUser(UserModel.null));
-  }, [id, navigate]);
+      .catch(error => {
+        console.info(`Mon status code : ${error.statusCode}`);
+        console.info(`Mon message : ${error.message}`);
+        setUser(UserModel.null);
+      });
 
-  useEffect(() => {
-    const userService = new UsersService();
     userService
       .getOneUserActivityById(id) // 12 et 18
       .then(setActivity)
       .catch(() => setActivity(ActivityModel.null));
-  }, [id, navigate]);
 
-  useEffect(() => {
-    const userService = new UsersService();
     userService
       .getOneUserAverageSessionById(id) // 12 et 18
       .then(setAverageSession)
       .catch(() => setAverageSession(AverageSessionModel.null));
-  }, [id, navigate]);
 
-  useEffect(() => {
-    const userService = new UsersService();
     userService
       .getOneUserPerformanceById(id) // 12 et 18
       .then(setPerformance)
@@ -57,10 +53,10 @@ const DashboardPage = () => {
         messageNotification={'Félicitation ! Vous avez explosé vos objectifs hier 👏'}
       />
       <div className={'graph-container'}>
-        <div>
-          {activity && <h2>Activité de l'utilisateur n°{activity.userId}</h2>}
-          {averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}
-          {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
+        <div className={'graphs'}>
+          <HistogramComponent />
+          {/*{averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}*/}
+          {/*{performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}*/}
         </div>
         <aside>
           {user && (

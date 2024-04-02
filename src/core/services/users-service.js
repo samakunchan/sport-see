@@ -6,6 +6,12 @@ import { PerformancesModel } from '../models/performances/performances-model';
 import { UserModel } from '../models/user/user-model';
 
 class UsersService {
+  testApi() {
+    return fetch('http://localhost:3005')
+      .then(this._getJson)
+      .catch(this._catchErrorAndReturnErrorModel);
+  }
+
   /**
    * @param id
    * @return {Promise<UserModel | ErrorModel>}
@@ -65,12 +71,38 @@ class UsersService {
    * @return {ErrorModel}
    */
   _catchErrorAndReturnErrorModel(error) {
+    const isApiActive = error.message !== 'Failed to fetch';
+    const isNotFound = error.status === HttpErrorStatusCode.notFound;
+
+    let statusCode;
+    switch (true) {
+      case !isApiActive:
+        statusCode = HttpErrorStatusCode.serverOffline;
+        break;
+      case !isNotFound:
+        statusCode = isNotFound;
+        break;
+      default:
+        statusCode = error.status;
+        break;
+    }
+
+    let message;
+    switch (statusCode) {
+      case HttpErrorStatusCode.serverOffline:
+        message = ErrorUtil.serverIsOffline;
+        break;
+      case HttpErrorStatusCode.notFound:
+        message = ErrorUtil.messageNotFound;
+        break;
+      default:
+        message = error.statusText;
+        break;
+    }
+
     throw new ErrorModel({
-      statusCode: error.status,
-      message:
-        error.status === HttpErrorStatusCode.notFound
-          ? ErrorUtil.messageNotFound
-          : error.statusText,
+      statusCode,
+      message,
     });
   }
 }

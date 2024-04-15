@@ -1,0 +1,10 @@
+@use "src/styles/abstracts";
+
+.histogram-container {
+  .histogram {
+    background-color: abstracts.$cardColor;
+    .bar-poids {
+      border-radius: 50px;
+    }
+  }
+}

@@ -1,363 +1,365 @@
-import {
-  axisBottom,
-  axisRight,
-  max,
-  min,
-  range,
-  scaleBand,
-  scaleLinear,
-  scaleOrdinal,
-  select,
-} from 'd3';
+import { axisBottom, axisRight, extent, local, max, min, scaleLinear, select } from 'd3';
 
 export class D3Service {
-  constructor({ ref }) {
+  constructor({ ref, svgWidth, svgHeight }) {
     this._ref = ref;
+    this._svgWidth = svgWidth;
+    this._svgHeight = svgHeight;
   }
 
-  build({ poids, calories }) {
+  drawHistogram({ poids, calories, titleText = '' }) {
     select(this._ref).selectAll('*').remove();
 
-    const margin = { top: 80, right: 45, bottom: 40, left: 45 };
-    const svgWidth = 800;
-    const svgHeight = 400;
-    const width = svgWidth - margin.left - margin.right;
-    const height = svgHeight - margin.top - margin.bottom;
+    const margin = { top: 80, right: 65, bottom: 40, left: 45 };
+    const minPoids = Number(min(poids));
+    const maxPoids = Number(max(poids));
+    const maxCalories = Number(max(calories));
+    const gapPoids = maxPoids - minPoids;
+    const gap = gapPoids > 2 ? 12 : 11;
 
+    // selection du graph
     const svg = select(this._ref)
-      .attr('width', svgWidth)
-      .attr('height', svgHeight)
-      .attr('background-color', '#fbfbfb');
-    const graphArea = svg
-      .attr(
-        'viewBox',
-        `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`,
-      )
-      .attr('preserveAspectRatio', 'xMinYMin')
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+      .attr('width', this._svgWidth)
+      .attr('height', this._svgHeight)
+      .style('background-color', '#fbfbfb')
+      .style('border-radius', '5px');
 
-    this.graphWeight({ poids, graphArea, width, height });
-    this.graphCalories({ calories, graphArea, width, height });
+    // X axis
+    const xExtent = extent(poids.map((d, i) => `${i + 1}`));
+    const xScale = scaleLinear()
+      .domain(xExtent ?? '')
+      .range([margin.left, this._svgWidth - margin.right - 20]);
+    const xAxis = axisBottom(xScale)
+      .tickSize(0)
+      .tickPadding(margin.bottom - 20)
+      .ticks(7);
 
-    this.moreInfos({ poids, graphArea, width, height });
+    // Y axis
+    const yScale = scaleLinear()
+      .domain([maxPoids - gap, maxPoids + 3])
+      .range([this._svgHeight - margin.top, margin.top]);
 
-    const legend = graphArea
-      .append('g')
-      .attr('transform', `translate(${width - 100},${height - 40})`);
+    const yCaloriesScale = scaleLinear()
+      .domain([0, maxCalories])
+      .range([0, this._svgHeight / 2]);
 
-    legend
-      .append('circle')
-      .attr('cx', -120)
-      .attr('cy', -height + 5)
-      .attr('r', 6)
-      .style('fill', '#000000');
-
-    legend
-      .append('text')
-      .attr('x', -100)
-      .attr('y', -height + 10)
-      .text('Poids (kg)')
-      .style('font-size', '15px');
-
-    legend
-      .append('circle')
-      .attr('cx', 10)
-      .attr('cy', -height + 5)
-      .attr('r', 6)
-      .style('fill', '#e41a1c');
-
-    legend
-      .append('text')
-      .attr('x', 30)
-      .attr('y', -height + 10)
-      .text('Calories (kCal)')
-      .style('font-size', '15px');
+    const yAxis = axisRight(yScale).ticks(3).tickSize(0).tickPadding(30);
 
     svg
-      .append('text')
-      .attr('x', width / 5)
-      .attr('y', height / 5)
-      .attr('text-anchor', 'middle')
-      .attr('font-size', '18px')
-      .attr('font-weight', 'bold')
-      .text('Activité quotidienne');
-  }
-
-  graphWeight({ poids, graphArea, width, height }) {
-    const x = scaleBand()
-      .rangeRound([0, width])
-      .domain(poids.map((d, i) => i))
-      .padding(0.9);
-
-    const y = scaleLinear()
-      .range([height, 0])
-      .domain([min(poids, d => Number(d)) - 1, max(poids, d => Number(d)) + 5])
-      .nice();
-
-    const xAxis = axisBottom(x).tickFormat((d, i) => i + 1);
-    const yAxis = axisRight(y).ticks(3).tickSize(-width);
-
-    graphArea
       .append('g')
-      .attr('class', 'axis')
-      .attr('transform', `translate(0, ${height})`)
-      .call(xAxis);
+      .call(xAxis)
+      .attr('transform', `translate(0, ${this._svgHeight - margin.top})`)
+      .attr('font-size', '1rem')
+      .select('path')
+      .attr('transform', 'scale(1.05) translate(-11,0)');
 
-    graphArea
+    svg
       .append('g')
-      .attr('class', 'axis')
-      .attr('transform', `translate(${width}, 0)`)
-      .attr('stroke-dasharray', '2')
       .call(yAxis)
+      .attr('transform', `translate(${this._svgWidth - margin.right}, 17)`) // Bouge les chiffres de l'ordonnée
+      .attr('font-size', '1rem')
       .select('.domain')
-      .style('padding-top', '50px')
-      .attr('display', 'none');
+      .remove();
 
-    const rx = 5;
-    const ry = 5;
+    // Pointillés
+    const yAxisGrid = axisRight(yScale)
+      .tickSize(-(this._svgWidth - margin.left - margin.right) - 20)
+      .ticks(3)
+      .tickFormat(() => '');
 
-    graphArea
-      .selectAll('bar')
+    svg
+      .append('g')
+      .style('stroke-dasharray', '3, 3')
+      .style('color', 'lightgray')
+      .attr('transform', `translate(${this._svgWidth - margin.right}, 17)`) // Bouge les pointillés de l'ordonnée
+      .call(yAxisGrid)
+      .select('path')
+      .remove();
+
+    // Titre
+    this.histogramTitle({ svg, titleText, margin });
+
+    // Légendes
+    this.histogramLegends({
+      svg,
+      positionCircle: this._svgWidth - 190,
+      positionText: this._svgWidth - 180,
+      color: '#000000',
+      titleText: 'Poids (kg)',
+    });
+    this.histogramLegends({
+      svg,
+      positionCircle: this._svgWidth - 100,
+      positionText: this._svgWidth - 90,
+      color: '#e41a1c',
+      titleText: 'Calories brûlées (kCal)',
+    });
+
+    // Initialisation du Hover
+    svg
+      .selectAll()
       .data(poids)
       .enter()
-      .append('path')
-      .style('fill', '#000000')
-      .attr(
-        'd',
-        (item, index) => `
-        M${x(index) - 10},${y(min(poids, d => Number(d))) + ry}
-        a${rx},${ry} 0 0 1 ${rx},${-ry}
-        h${x.bandwidth() - 2 * rx}
-        a${rx},${ry} 0 0 1 ${rx},${ry}
-        v${height - y(min(poids, d => Number(d))) - ry}
-        h${-x.bandwidth()}Z
-      `,
-      )
-      .transition()
-      .duration(500)
-      .attr('y', d => y(Number(d)) + ry)
-      .attr(
-        'd',
-        (item, index) => `
-        M${x(index) - 10},${y(Number(item)) + ry}
-        a${rx},${ry} 0 0 1 ${rx},${-ry}
-        h${x.bandwidth() - 2 * rx}
-        a${rx},${ry} 0 0 1 ${rx},${ry}
-        v${height - y(Number(item)) - ry}
-        h${-x.bandwidth()}Z
-      `,
-      );
+      .append('g')
+      .attr('class', (d, i) => `g-hover-${i}`)
+      .attr('transform', (d, i) => `translate(${xScale(i) + margin.left + margin.right - 30}, 70)`)
+      .each((d, index, nodes) => {
+        const selection = select(nodes[index]);
+        selection
+          .append('rect')
+          .attr('class', () => `g-bg-grey`)
+          .attr('height', `${this._svgHeight + margin.bottom - 190}px`)
+          .attr('width', () => `65px`)
+          .attr('fill', 'transparent');
+
+        selection
+          .append('rect')
+          .attr('class', () => `g-bg-red`)
+          .attr('transform', (d, i) => `translate(${xScale(i) + 120}, 10)`)
+          .attr('width', () => `60px`)
+          .attr('height', `70px`)
+          .attr('fill', 'transparent');
+
+        selection
+          .append('text')
+          .attr('class', () => `g-text-kg`)
+          .text(d => `${d}Kg`)
+          .attr('transform', (d, i) => `translate(${xScale(i) + 150}, 30)`)
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '12px')
+          .attr('fill', 'transparent');
+
+        selection
+          .append('text')
+          .attr('class', () => `g-text-cal`)
+          .text(() => `${calories[index]}Kcal`)
+          .attr('transform', (d, i) => `translate(${xScale(i) + 150}, 60)`)
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '12px')
+          .attr('fill', 'transparent');
+      });
+
+    // Barres des histogrammes
+    const poidsConfiguration = {
+      typeRound: {
+        x1: (d, i) => xScale(i) + this._svgWidth / 7.5,
+        x2: (d, i) => xScale(i) + this._svgWidth / 7.5,
+        y1: () => this._svgHeight + margin.bottom - 150,
+        y2: () => this._svgHeight + margin.bottom - 125,
+      },
+      typeRectangle: {
+        x1: (d, i) => xScale(i) + this._svgWidth / 7.5,
+        x2: (d, i) => xScale(i) + this._svgWidth / 7.5,
+        y1: () => this._svgHeight + margin.bottom - 120,
+        y2: () => this._svgHeight + margin.bottom - 125,
+      },
+      yScale,
+    };
+    const caloriesConfiguration = {
+      typeRound: {
+        x1: (d, i) => xScale(i) + this._svgWidth / 6.5,
+        x2: (d, i) => xScale(i) + this._svgWidth / 6.5,
+        y1: () => this._svgHeight + margin.bottom - 150,
+        y2: () => this._svgHeight + margin.bottom - 125,
+      },
+      typeRectangle: {
+        x1: (d, i) => xScale(i) + this._svgWidth / 6.5,
+        x2: (d, i) => xScale(i) + this._svgWidth / 6.5,
+        y1: () => this._svgHeight + margin.bottom - 120,
+        y2: () => this._svgHeight + margin.bottom - 125,
+      },
+      yScale: yCaloriesScale,
+    };
+
+    this.histogramBar({
+      type: 'poids',
+      svg,
+      margin,
+      datas: poids,
+      configuration: poidsConfiguration,
+      color: '#000000',
+    });
+    this.histogramBar({
+      type: 'calories',
+      svg,
+      margin,
+      datas: calories,
+      configuration: caloriesConfiguration,
+      color: '#e41a1c',
+    });
+
+    // Activation des Hovers
+    this.activateEventHoverOnbar({ svg, poids, margin, xScale });
   }
 
-  graphCalories({ calories, graphArea, width, height }) {
-    const x = scaleBand()
-      .rangeRound([0, width])
-      .domain(calories.map((d, i) => i))
-      .padding(0.9);
+  /**
+   * Ajoute un titre sur l'histogramme
+   * @param svg `svg` de l'histogramme
+   * @param margin `margin`
+   * @param titleText {string} - Titre
+   */
+  histogramTitle({ svg, margin, titleText }) {
+    svg
+      .append('text')
+      .attr('x', margin.right)
+      .attr('y', 38)
+      .text(titleText)
+      .style('font-weight', '500');
+  }
 
-    const y = scaleLinear()
-      .range([height, 0])
-      .domain([min(calories, d => Number(d)) - 15, max(calories, d => +d) + 5])
-      .nice();
+  /**
+   * Ajout une légende sur l'histogramme
+   * @param svg `svg` de l'histogramme
+   * @param positionCircle - La position du rond
+   * @param positionText - La position du texte
+   * @param color {string} `#000000 | #e41a1c`
+   * @param titleText {string} - Titre
+   */
+  histogramLegends({ svg, positionCircle, positionText, color, titleText }) {
+    const legend = svg
+      .append('g')
+      .attr('transform', `translate(${-(this._svgWidth * 0.15)},${this._svgHeight * 0.01})`);
+    legend
+      .append('circle')
+      .attr('cx', positionCircle)
+      .attr('cy', 30)
+      .attr('r', 5)
+      .attr('fill', color);
+    legend
+      .append('text')
+      .text(titleText)
+      .attr('dx', positionText)
+      .attr('dy', 35)
+      .attr('fill', '#74798C')
+      .style('font-size', '14px');
+  }
 
-    const rx = 5;
-    const ry = 5;
+  /**
+   * Créer une barre pour chaque valeur réçu
+   * @param svg `svg` de l'histogramme
+   * @param type {string} `poids | calories`
+   * @param datas {number[]} Liste de données
+   * @param margin `margin`
+   * @param configuration {Object} Configuration des barres
+   * @param color {string} `#000000 | #e41a1c`
+   */
+  histogramBar({ type, svg, datas, margin, configuration, color }) {
+    const height = Number(this._svgHeight) - margin.top - margin.bottom;
 
-    graphArea
-      .selectAll('bar')
-      .data(calories)
+    // Bar rond
+    svg
+      .append('g')
+      .selectAll('line')
+      .data(datas)
       .enter()
-      .append('path')
-      .style('fill', '#e41a1c')
-      .attr(
-        'd',
-        (item, index) => `
-        M${x(index) + 10},${y(min(calories, d => Number(d))) + ry}
-        a${rx},${ry} 0 0 1 ${rx},${-ry}
-        h${x.bandwidth() - 2 * rx}
-        a${rx},${ry} 0 0 1 ${rx},${ry}
-        v${height - y(min(calories, d => Number(d))) - ry}
-        h${-x.bandwidth()}Z
-      `,
-      )
+      .append('line')
+      .attr('x1', configuration.typeRound.x1)
+      .attr('x2', configuration.typeRound.x2)
+      .attr('y1', configuration.typeRound.y1)
+      .attr('y2', configuration.typeRound.y2)
+      .attr('stroke', color)
+      .attr('stroke-width', '8')
+      .attr('stroke-linecap', 'round')
       .transition()
-      .duration(500)
-      .attr('y', d => y(Number(d)) + ry)
-      .attr(
-        'd',
-        (item, index) => `
-        M${x(index) + 10},${y(Number(item)) + ry}
-        a${rx},${ry} 0 0 1 ${rx},${-ry}
-        h${x.bandwidth() - 2 * rx}
-        a${rx},${ry} 0 0 1 ${rx},${ry}
-        v${height - y(Number(item)) - ry}
-        h${-x.bandwidth()}Z
-      `,
+      .duration(700)
+      .attr('y2', d =>
+        type === 'calories' ? height - configuration.yScale(d) + 20 : configuration.yScale(d) + 20,
       );
+
+    // Bar rectangulaire
+    svg
+      .append('g')
+      .selectAll('line')
+      .data(datas)
+      .enter()
+      .append('line')
+      .attr('x1', configuration.typeRectangle.x1)
+      .attr('x2', configuration.typeRectangle.x2)
+      .attr('y1', configuration.typeRectangle.y1)
+      .attr('y2', configuration.typeRectangle.y2)
+      .transition()
+      .duration(700)
+      .attr('y2', d =>
+        type === 'calories' ? height - configuration.yScale(d) + 20 : configuration.yScale(d) + 20,
+      )
+      .attr('stroke', color)
+      .attr('stroke-width', '8')
+      .attr('stroke-linecap', 'butt');
   }
 
-  moreInfos({ poids, graphArea, width, height }) {
-    const x = scaleBand()
-      .rangeRound([0, width])
-      .domain(poids.map((d, i) => i))
-      .padding(0.9);
+  /**
+   * Utilise l'event hover pour afficher des informations supplémentaires
+   * @param svg - `svg` de l'histogramme
+   * @param poids {number[]} - Les données du poids
+   * @param margin - `margin`
+   * @param xScale - `ScaleLinear`
+   */
+  activateEventHoverOnbar({ svg, poids, margin, xScale }) {
+    const localIndex = local();
+    const setLocalIndex = (d, i, nodes) => localIndex.set(nodes[i], i);
 
-    graphArea
+    svg
       .selectAll('.x-axis-group')
       .data(poids)
       .enter()
-      .append('g')
-      .attr('class', 'g-infos')
       .append('rect')
       .attr('class', 'g-rect')
-      .attr('transform', (d, i) => `translate(${x(i) - 30}, 0)`)
-      .style('height', `${height}px`)
-      .style('width', `${x.bandwidth() + 60}px`)
-      .style('fill', 'transparent');
-
-    const infosGroup = graphArea.selectAll('.g-infos').append('rect').attr('class', 'infos');
-    infosGroup
-      .attr('transform', (d, i) => `translate(${x(i) + 50}, 0)`)
-      .style('height', `90px`)
-      .style('width', `${x.bandwidth() + 60}px`)
-      .style('fill', 'transparent');
-
-    infosGroup
-      .append('text')
-      .attr('class', 'text-infos')
-      .attr('transform', (d, i) => `translate(${x(i) + 50}, 45)`)
-      .attr('color', 'green !important')
-      .text(`Activité`);
-
-    graphArea
-      .selectAll('.g-rect')
-      .on('mouseover', event => {
-        select(event.currentTarget).style('fill', 'rgba(196,196,196,0.56)');
-        select(event.currentTarget.parentElement).select('.infos').style('fill', '#e41a1c');
-
-        select(event.currentTarget.parentElement)
-          .select('.text-infos')
-          .style('fill', 'white !important');
-        select(event.currentTarget.parentElement)
-          .select('.text-infos')
-          .style('color', 'white !important');
-        // tooltip.style('visibility', 'visible').text(`count: 1111`);
-      })
-      .on('mouseout', event => {
-        select(event.currentTarget).style('fill', 'transparent');
-        select(event.currentTarget.parentElement).select('.infos').style('fill', 'transparent');
-
-        select(event.currentTarget.parentElement)
-          .select('.text-infos')
-          .style('fill', 'transparent');
-      });
+      .attr('transform', (d, i) => `translate(${xScale(i) + margin.left + margin.right - 30}, 70)`)
+      .attr('height', `${this._svgHeight + margin.bottom - 190}px`)
+      .attr('width', () => `65px`)
+      .attr('fill', 'transparent')
+      .each(setLocalIndex) // Pour ajouter une série d'index pour le hover
+      .on('mouseover', event => this.onHoverIn({ localIndex, event }))
+      .on('mouseout', event => this.onHoverOut({ localIndex, event }));
   }
 
-  // /**
-  //  * @param ref
-  //  * @param poids {number[]}
-  //  * @param calories {number[]}
-  //  */
-  // testExemple({ poids, calories }) {
-  //   select(this._ref).selectAll('*').remove();
-  //
-  //   // Set up margins and dimensions
-  //   const margin = { top: 10, right: 30, bottom: 20, left: 50 },
-  //     width = 800 - margin.left - margin.right,
-  //     height = 500 - margin.top - margin.bottom;
-  //
-  //   // Append the SVG element to the body of the page
-  //   const svg = select(this._ref)
-  //     .attr('width', width + margin.left + margin.right)
-  //     .attr('height', height + margin.top + margin.bottom)
-  //     .attr(
-  //       'viewBox',
-  //       `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`,
-  //     )
-  //     .attr('preserveAspectRatio', 'xMinYMin')
-  //     .append('g')
-  //     .attr('transform', `translate(${margin.left},${margin.top})`);
-  //
-  //   // Set up the X scale
-  //   const x = scaleBand().domain(range(poids.length)).range([0, width]).padding(0.2);
-  //   svg.append('g').attr('transform', `translate(0, ${height})`).call(axisBottom(x));
-  //
-  //   // Set up the Y scale
-  //   const y = scaleLinear()
-  //     .domain([0, max([...poids, ...calories])])
-  //     .range([height, 0]);
-  //
-  //   svg
-  //     .append('g')
-  //     .attr('transform', `translate(${width}, 0)`)
-  //     // .call(axisRight(y).ticks(3).tickSize(0))
-  //     .call(axisRight(y).ticks(2).tickFormat(null).tickSize(-width))
-  //     .attr('stroke-dasharray', '2');
-  //
-  //   // Set up the color scale
-  //   const color = scaleOrdinal().domain(['poids', 'calories']).range(['#000000', '#e41a1c']);
-  //
-  //   // Draw the bars for datas1
-  //   svg
-  //     .selectAll('.bar-poids')
-  //     .data(poids)
-  //     .enter()
-  //     .append('rect')
-  //     .attr('class', 'bar-poids')
-  //     .attr('x', (d, i) => x(i) + x.bandwidth() / 10)
-  //     .attr('y', d => y(d))
-  //     .attr('width', x.bandwidth() / 3)
-  //     .attr('height', d => height - y(d))
-  //     .attr('fill', color('poids'))
-  //     // .attr('rx', 55) // Arrondir les coins supérieurs
-  //     .attr('ry', d => (y(d) !== height ? 5 : 0));
-  //
-  //   // Draw the bars for datas2
-  //   svg
-  //     .selectAll('.bar-calories')
-  //     .data(calories)
-  //     .enter()
-  //     .append('rect')
-  //     .attr('class', 'bar-calories')
-  //     .attr('x', (d, i) => x(i) + x.bandwidth() / 1.8)
-  //     .attr('y', d => y(d))
-  //     .attr('width', x.bandwidth() / 3)
-  //     .attr('height', d => height - y(d))
-  //     .attr('fill', color('calories'))
-  //     // .attr('rx', 55) // Arrondir les coins supérieurs
-  //     .attr('ry', d => (y(d) !== height ? 5 : 0));
-  // }
+  onHoverIn({ localIndex, event }) {
+    const index = localIndex.get(event.currentTarget);
+    select(`.g-hover-${index}`)
+      .select(`.g-bg-grey`)
+      .transition()
+      .duration(150)
+      .attr('fill', 'rgba(196, 196, 196, 0.5)');
 
-  // /**
-  //  *
-  //  * @param width
-  //  * @param datas
-  //  * @return {ScaleBand<string>}
-  //  */
-  // getAbscisse(width, datas) {
-  //   return scaleBand()
-  //     .domain(datas.map((_, i) => i.toString()))
-  //     .range([0, width])
-  //     .padding(0.2);
-  // }
-  //
-  // /**
-  //  *
-  //  * @param height
-  //  * @param max
-  //  * @return {ScaleLinear<number, number, never>}
-  //  */
-  // getOrdonnee(height, max) {
-  //   return scaleLinear().domain([0, max]).range([height, 0]);
-  // }
-  //
-  // /**
-  //  *
-  //  * @param y
-  //  * @return {Axis<AxisDomain>}
-  //  */
-  // makeYGridlines(y) {
-  //   return axisRight(y).ticks(5);
-  // }
+    select(`.g-hover-${index}`)
+      .select(`.g-bg-red`)
+      .transition()
+      .duration(150)
+      .attr('fill', '#e41a1c');
+
+    select(`.g-hover-${index}`)
+      .select(`.g-text-kg`)
+      .transition()
+      .duration(150)
+      .attr('fill', '#FFFFFF');
+
+    select(`.g-hover-${index}`)
+      .select(`.g-text-cal`)
+      .transition()
+      .duration(150)
+      .attr('fill', '#FFFFFF');
+  }
+
+  onHoverOut({ localIndex, event }) {
+    const index = localIndex.get(event.currentTarget);
+    select(`.g-hover-${index}`).select(`.g-bg-grey`).transition().attr('fill', 'transparent');
+
+    select(`.g-hover-${index}`)
+      .select(`.g-bg-red`)
+      .transition()
+      .duration(150)
+      .attr('fill', 'transparent');
+
+    select(`.g-hover-${index}`)
+      .select(`.g-text-kg`)
+      .transition()
+      .duration(150)
+      .attr('fill', 'transparent');
+
+    select(`.g-hover-${index}`)
+      .select(`.g-text-cal`)
+      .transition()
+      .duration(150)
+      .attr('fill', 'transparent');
+  }
 }

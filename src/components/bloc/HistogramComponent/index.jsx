@@ -1,7 +1,7 @@
 import './index.scss';
+import PropTypes, { number } from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { D3Service } from '../../../core/services/d3-service';
-import PropTypes from 'prop-types';
 
 /**
  * Créer le composant HistogramComponent
@@ -12,10 +12,12 @@ import PropTypes from 'prop-types';
  */
 const HistogramComponent = ({ poids, calories }) => {
   const svgRef = useRef();
-  const titleText = 'Titre du graph';
+  const titleText = 'Activité quotidienne';
   useEffect(() => {
-    const d3Service = new D3Service({ ref: svgRef.current });
-    d3Service.build({ poids, calories });
+    const svgWidth = 800;
+    const svgHeight = 400;
+    const d3Service = new D3Service({ ref: svgRef.current, svgWidth, svgHeight });
+    d3Service.drawHistogram({ poids, calories, titleText });
   }, [poids, calories, titleText]);
 
   return (
@@ -26,8 +28,8 @@ const HistogramComponent = ({ poids, calories }) => {
 };
 
 HistogramComponent.propType = {
-  datas1: PropTypes.array.isRequired,
-  datas2: PropTypes.array.isRequired,
+  datas1: PropTypes.arrayOf(number).isRequired,
+  datas2: PropTypes.arrayOf(number).isRequired,
 };
 
 export default HistogramComponent;

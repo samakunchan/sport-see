@@ -59,8 +59,8 @@ const DashboardPage = () => {
         <div className={'graphs'}>
           {activity && (
             <HistogramComponent
-              poids={activity?.sessions.map(session => Number(session.kilogram))}
-              calories={activity?.sessions.map(session => Number(session.calories))}
+              poids={activity.sessions.map(session => Number(session.kilogram))}
+              calories={activity.sessions.map(session => Number(session.calories))}
             />
           )}
           {averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}

@@ -3,8 +3,7 @@
 .histogram-container {
   .histogram {
     background-color: abstracts.$cardColor;
-    .bar-poids {
-      border-radius: 50px;
-    }
+    max-width: 750px;
+    width: 100%;
   }
 }

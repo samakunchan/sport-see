@@ -3,4 +3,10 @@
 .graph-container {
   display: flex;
   justify-content: space-between;
+  .graphs {
+    .main-graph {}
+    .secondary-graphs {
+      display: flex;
+    }
+  }
 }

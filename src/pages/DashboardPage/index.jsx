@@ -58,14 +58,18 @@ const DashboardPage = () => {
       />
       <div className={'graph-container'}>
         <div className={'graphs'}>
-          {activity && (
-            <HistogramComponent
-              poids={activity.sessions.map(session => Number(session.kilogram))}
-              calories={activity.sessions.map(session => Number(session.calories))}
-            />
-          )}
-          {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
-          {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
+          <div className={'main-graph'}>
+            {activity && (
+              <HistogramComponent
+                poids={activity.sessions.map(session => Number(session.kilogram))}
+                calories={activity.sessions.map(session => Number(session.calories))}
+              />
+            )}
+          </div>
+          <div className={'secondary-graphs'}>
+            {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
+            {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
+          </div>
         </div>
         {user && (
           <aside>

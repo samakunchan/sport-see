@@ -1,7 +1,7 @@
 import './index.scss';
 import PropTypes, { number } from 'prop-types';
 import { useEffect, useRef } from 'react';
-import { D3Service } from '../../../core/services/d3-service';
+import { D3HistogramService } from '../../../core/services/d3-histogram-service';
 
 /**
  * Créer le composant HistogramComponent
@@ -14,10 +14,10 @@ const HistogramComponent = ({ poids, calories }) => {
   const svgRef = useRef();
   const titleText = 'Activité quotidienne';
   useEffect(() => {
-    const svgWidth = 800;
-    const svgHeight = 400;
-    const d3Service = new D3Service({ ref: svgRef.current, svgWidth, svgHeight });
-    d3Service.drawHistogram({ poids, calories, titleText });
+    const svgWidth = 750;
+    const svgHeight = 350;
+    const d3HistogramService = new D3HistogramService({ ref: svgRef.current, svgWidth, svgHeight });
+    d3HistogramService.drawGraph({ poids, calories, titleText });
   }, [poids, calories, titleText]);
 
   return (

@@ -5,6 +5,7 @@ import { AverageSessionModel } from '../../core/models/average-session/average-s
 import CardComponent from '../../components/bloc/CardComponent';
 import { ErrorModel } from '../../core/models/error-model';
 import HistogramComponent from '../../components/bloc/HistogramComponent';
+import LineChartComponent from '../../components/bloc/LineChartComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
 import { PerformancesModel } from '../../core/models/performances/performances-model';
 import TitleComponent from '../../components/bloc/TitleComponent';
@@ -63,7 +64,7 @@ const DashboardPage = () => {
               calories={activity.sessions.map(session => Number(session.calories))}
             />
           )}
-          {averageSession && <h2>Session moyenne de l'utilisateur n°{averageSession.userId}</h2>}
+          {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
           {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
         </div>
         {user && (

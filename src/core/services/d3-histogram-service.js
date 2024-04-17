@@ -41,9 +41,14 @@ export class D3HistogramService extends GraphService {
     // selection du graph
     const svg = select(this._ref)
       .attr('width', this._svgWidth)
-      .attr('height', this._svgHeight)
+      // .attr('height', this._svgHeight) // Supprimer pour le responsive
       .style('background-color', cardColor)
-      .style('border-radius', '5px');
+      .style('border-radius', '5px')
+      // Pour le responsive. Un max-width = this._svgWidth et un width = 100%
+      // sur le svg est important dans le fichier css
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      // Pour le responsive aussi. La largueur et hauteur est redéfinis ici
+      .attr('viewBox', `0 0 ${this._svgWidth} ${this._svgHeight}`);
 
     // X axis
     const xExtent = extent(poids.map((d, i) => `${i + 1}`));

@@ -1,43 +1,64 @@
 import { axisBottom, axisRight, extent, local, max, min, scaleLinear, select } from 'd3';
+import { GraphService } from './graph-service';
 
-export class D3Service {
+/**
+ * Service contenant les éléments pour construire un histogramme.
+ * @param ref {MutableRefObject<undefined>.current} - `svgRef.current`. Référence du graph
+ * @param svgWidth {number} Largeur du graph
+ * @param svgHeight {number} Hauteur du graph
+ * @class
+ */
+export class D3HistogramService extends GraphService {
+  /**
+   * @param ref {MutableRefObject<undefined>.current} - `svgRef.current`. Référence du graph
+   * @param svgWidth {number} Largeur du graph
+   * @param svgHeight {number} Hauteur du graph
+   * @constructor
+   */
   constructor({ ref, svgWidth, svgHeight }) {
-    this._ref = ref;
-    this._svgWidth = svgWidth;
-    this._svgHeight = svgHeight;
+    const margin = { top: 80, right: 65, bottom: 40, left: 45 };
+    super({ ref, svgWidth, svgHeight, margin });
   }
 
-  drawHistogram({ poids, calories, titleText = '' }) {
+  /**
+   * Créer l'histogramme
+   * @param poids {number[]} - Liste de nombres
+   * @param calories {number[]} - Liste de nombres
+   * @param titleText {string} - Titre de l'histogramme
+   */
+  drawGraph({ poids, calories, titleText = '' }) {
     select(this._ref).selectAll('*').remove();
 
-    const margin = { top: 80, right: 65, bottom: 40, left: 45 };
     const minPoids = Number(min(poids));
     const maxPoids = Number(max(poids));
     const maxCalories = Number(max(calories));
     const gapPoids = maxPoids - minPoids;
-    const gap = gapPoids > 2 ? 12 : 11;
+    const gap = gapPoids > 2 ? 12.5 : 11.2;
+    const primaryColor = '#e41a1c';
+    const blackColor = '#000000';
+    const cardColor = '#fbfbfb';
 
     // selection du graph
     const svg = select(this._ref)
       .attr('width', this._svgWidth)
       .attr('height', this._svgHeight)
-      .style('background-color', '#fbfbfb')
+      .style('background-color', cardColor)
       .style('border-radius', '5px');
 
     // X axis
     const xExtent = extent(poids.map((d, i) => `${i + 1}`));
     const xScale = scaleLinear()
       .domain(xExtent ?? '')
-      .range([margin.left, this._svgWidth - margin.right - 20]);
+      .range([this._margin.left, this._svgWidth - this._margin.right - 20]);
     const xAxis = axisBottom(xScale)
       .tickSize(0)
-      .tickPadding(margin.bottom - 20)
+      .tickPadding(this._margin.bottom - 20)
       .ticks(7);
 
     // Y axis
     const yScale = scaleLinear()
       .domain([maxPoids - gap, maxPoids + 3])
-      .range([this._svgHeight - margin.top, margin.top]);
+      .range([this._svgHeight - this._margin.top, this._margin.top]);
 
     const yCaloriesScale = scaleLinear()
       .domain([0, maxCalories])
@@ -48,7 +69,7 @@ export class D3Service {
     svg
       .append('g')
       .call(xAxis)
-      .attr('transform', `translate(0, ${this._svgHeight - margin.top})`)
+      .attr('transform', `translate(0, ${this._svgHeight - this._margin.top})`)
       .attr('font-size', '1rem')
       .select('path')
       .attr('transform', 'scale(1.05) translate(-11,0)');
@@ -56,14 +77,14 @@ export class D3Service {
     svg
       .append('g')
       .call(yAxis)
-      .attr('transform', `translate(${this._svgWidth - margin.right}, 17)`) // Bouge les chiffres de l'ordonnée
+      .attr('transform', `translate(${this._svgWidth - this._margin.right}, 17)`) // Bouge les chiffres de l'ordonnée
       .attr('font-size', '1rem')
       .select('.domain')
       .remove();
 
     // Pointillés
     const yAxisGrid = axisRight(yScale)
-      .tickSize(-(this._svgWidth - margin.left - margin.right) - 20)
+      .tickSize(-(this._svgWidth - this._margin.left - this._margin.right) - 20)
       .ticks(3)
       .tickFormat(() => '');
 
@@ -71,27 +92,27 @@ export class D3Service {
       .append('g')
       .style('stroke-dasharray', '3, 3')
       .style('color', 'lightgray')
-      .attr('transform', `translate(${this._svgWidth - margin.right}, 17)`) // Bouge les pointillés de l'ordonnée
+      .attr('transform', `translate(${this._svgWidth - this._margin.right}, 17)`) // Bouge les pointillés de l'ordonnée
       .call(yAxisGrid)
       .select('path')
       .remove();
 
     // Titre
-    this.histogramTitle({ svg, titleText, margin });
+    this.histogramTitle({ svg, titleText });
 
     // Légendes
     this.histogramLegends({
       svg,
       positionCircle: this._svgWidth - 190,
       positionText: this._svgWidth - 180,
-      color: '#000000',
+      color: blackColor,
       titleText: 'Poids (kg)',
     });
     this.histogramLegends({
       svg,
       positionCircle: this._svgWidth - 100,
       positionText: this._svgWidth - 90,
-      color: '#e41a1c',
+      color: primaryColor,
       titleText: 'Calories brûlées (kCal)',
     });
 
@@ -102,13 +123,16 @@ export class D3Service {
       .enter()
       .append('g')
       .attr('class', (d, i) => `g-hover-${i}`)
-      .attr('transform', (d, i) => `translate(${xScale(i) + margin.left + margin.right - 30}, 70)`)
+      .attr(
+        'transform',
+        (d, i) => `translate(${xScale(i) + this._margin.left + this._margin.right - 30}, 70)`,
+      )
       .each((d, index, nodes) => {
         const selection = select(nodes[index]);
         selection
           .append('rect')
           .attr('class', () => `g-bg-grey`)
-          .attr('height', `${this._svgHeight + margin.bottom - 190}px`)
+          .attr('height', `${this._svgHeight + this._margin.bottom - 190}px`)
           .attr('width', () => `65px`)
           .attr('fill', 'transparent');
 
@@ -144,14 +168,14 @@ export class D3Service {
       typeRound: {
         x1: (d, i) => xScale(i) + this._svgWidth / 7.5,
         x2: (d, i) => xScale(i) + this._svgWidth / 7.5,
-        y1: () => this._svgHeight + margin.bottom - 150,
-        y2: () => this._svgHeight + margin.bottom - 125,
+        y1: () => this._svgHeight + this._margin.bottom - 150,
+        y2: () => this._svgHeight + this._margin.bottom - 125,
       },
       typeRectangle: {
         x1: (d, i) => xScale(i) + this._svgWidth / 7.5,
         x2: (d, i) => xScale(i) + this._svgWidth / 7.5,
-        y1: () => this._svgHeight + margin.bottom - 120,
-        y2: () => this._svgHeight + margin.bottom - 125,
+        y1: () => this._svgHeight + this._margin.bottom - 120,
+        y2: () => this._svgHeight + this._margin.bottom - 125,
       },
       yScale,
     };
@@ -159,14 +183,14 @@ export class D3Service {
       typeRound: {
         x1: (d, i) => xScale(i) + this._svgWidth / 6.5,
         x2: (d, i) => xScale(i) + this._svgWidth / 6.5,
-        y1: () => this._svgHeight + margin.bottom - 150,
-        y2: () => this._svgHeight + margin.bottom - 125,
+        y1: () => this._svgHeight + this._margin.bottom - 150,
+        y2: () => this._svgHeight + this._margin.bottom - 125,
       },
       typeRectangle: {
         x1: (d, i) => xScale(i) + this._svgWidth / 6.5,
         x2: (d, i) => xScale(i) + this._svgWidth / 6.5,
-        y1: () => this._svgHeight + margin.bottom - 120,
-        y2: () => this._svgHeight + margin.bottom - 125,
+        y1: () => this._svgHeight + this._margin.bottom - 120,
+        y2: () => this._svgHeight + this._margin.bottom - 125,
       },
       yScale: yCaloriesScale,
     };
@@ -174,34 +198,31 @@ export class D3Service {
     this.histogramBar({
       type: 'poids',
       svg,
-      margin,
       datas: poids,
       configuration: poidsConfiguration,
-      color: '#000000',
+      color: blackColor,
     });
     this.histogramBar({
       type: 'calories',
       svg,
-      margin,
       datas: calories,
       configuration: caloriesConfiguration,
-      color: '#e41a1c',
+      color: primaryColor,
     });
 
     // Activation des Hovers
-    this.activateEventHoverOnbar({ svg, poids, margin, xScale });
+    this.activateEventHoverOnbar({ svg, poids, xScale });
   }
 
   /**
    * Ajoute un titre sur l'histogramme
-   * @param svg `svg` de l'histogramme
-   * @param margin `margin`
+   * @param svg {MutableRefObject<undefined>.current} `svg` de l'histogramme
    * @param titleText {string} - Titre
    */
-  histogramTitle({ svg, margin, titleText }) {
+  histogramTitle({ svg, titleText }) {
     svg
       .append('text')
-      .attr('x', margin.right)
+      .attr('x', this._margin.right)
       .attr('y', 38)
       .text(titleText)
       .style('font-weight', '500');
@@ -209,7 +230,7 @@ export class D3Service {
 
   /**
    * Ajout une légende sur l'histogramme
-   * @param svg `svg` de l'histogramme
+   * @param svg {MutableRefObject<undefined>.current} `svg` de l'histogramme
    * @param positionCircle - La position du rond
    * @param positionText - La position du texte
    * @param color {string} `#000000 | #e41a1c`
@@ -236,15 +257,14 @@ export class D3Service {
 
   /**
    * Créer une barre pour chaque valeur réçu
-   * @param svg `svg` de l'histogramme
+   * @param svg {MutableRefObject<undefined>.current} `svg` de l'histogramme
    * @param type {string} `poids | calories`
    * @param datas {number[]} Liste de données
-   * @param margin `margin`
    * @param configuration {Object} Configuration des barres
    * @param color {string} `#000000 | #e41a1c`
    */
-  histogramBar({ type, svg, datas, margin, configuration, color }) {
-    const height = Number(this._svgHeight) - margin.top - margin.bottom;
+  histogramBar({ type, svg, datas, configuration, color }) {
+    const height = Number(this._svgHeight) - this._margin.top - this._margin.bottom;
 
     // Bar rond
     svg
@@ -289,12 +309,11 @@ export class D3Service {
 
   /**
    * Utilise l'event hover pour afficher des informations supplémentaires
-   * @param svg - `svg` de l'histogramme
+   * @param svg {MutableRefObject<undefined>.current} - `svg` de l'histogramme
    * @param poids {number[]} - Les données du poids
-   * @param margin - `margin`
    * @param xScale - `ScaleLinear`
    */
-  activateEventHoverOnbar({ svg, poids, margin, xScale }) {
+  activateEventHoverOnbar({ svg, poids, xScale }) {
     const localIndex = local();
     const setLocalIndex = (d, i, nodes) => localIndex.set(nodes[i], i);
 
@@ -304,8 +323,11 @@ export class D3Service {
       .enter()
       .append('rect')
       .attr('class', 'g-rect')
-      .attr('transform', (d, i) => `translate(${xScale(i) + margin.left + margin.right - 30}, 70)`)
-      .attr('height', `${this._svgHeight + margin.bottom - 190}px`)
+      .attr(
+        'transform',
+        (d, i) => `translate(${xScale(i) + this._margin.left + this._margin.right - 30}, 70)`,
+      )
+      .attr('height', `${this._svgHeight + this._margin.bottom - 190}px`)
       .attr('width', () => `65px`)
       .attr('fill', 'transparent')
       .each(setLocalIndex) // Pour ajouter une série d'index pour le hover
@@ -313,6 +335,11 @@ export class D3Service {
       .on('mouseout', event => this.onHoverOut({ localIndex, event }));
   }
 
+  /**
+   * Méthode pour le Hover in
+   * @param localIndex {Local} - Index local de D3Js
+   * @param event {Event} Event sur le graph
+   */
   onHoverIn({ localIndex, event }) {
     const index = localIndex.get(event.currentTarget);
     select(`.g-hover-${index}`)
@@ -340,6 +367,11 @@ export class D3Service {
       .attr('fill', '#FFFFFF');
   }
 
+  /**
+   * Méthode pour le Hover out
+   * @param localIndex {Local} - Index local de D3Js
+   * @param event {Event} Event sur le graph
+   */
   onHoverOut({ localIndex, event }) {
     const index = localIndex.get(event.currentTarget);
     select(`.g-hover-${index}`).select(`.g-bg-grey`).transition().attr('fill', 'transparent');

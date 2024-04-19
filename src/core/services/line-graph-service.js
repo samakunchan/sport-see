@@ -14,7 +14,7 @@ import {
 import { GraphService } from './graph-service';
 
 /**
- * Service contenant les éléments pour construire un histogramme.
+ * Service contenant les éléments pour construire une courbe.
  * @param ref {MutableRefObject<undefined>.current} - `svgRef.current`. Référence du graph
  * @param svgWidth {number} Largeur du graph
  * @param svgHeight {number} Hauteur du graph
@@ -126,7 +126,7 @@ export class LineGraphService extends GraphService {
 
   /**
    * Ajoute un titre sur l'histogramme
-   * @param svg {MutableRefObject<undefined>.current} `svg` de l'histogramme
+   * @param svg {MutableRefObject.current} `svg` de l'histogramme
    * @param titleText {string} - Titre
    * @param secondaryColor {string} `rgba(251,251,251,0.70)`
    */

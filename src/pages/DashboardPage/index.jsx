@@ -7,7 +7,8 @@ import { ErrorModel } from '../../core/models/error-model';
 import HistogramComponent from '../../components/bloc/HistogramComponent';
 import LineChartComponent from '../../components/bloc/LineChartComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
-import { PerformancesModel } from '../../core/models/performances/performances-model';
+import { PerformanceModel } from '../../core/models/performances/performances-model';
+import RadarChartComponent from '../../components/bloc/RadarChartComponent';
 import TitleComponent from '../../components/bloc/TitleComponent';
 import { UserModel } from '../../core/models/user/user-model';
 import UsersService from '../../core/services/users-service';
@@ -17,7 +18,7 @@ const DashboardPage = () => {
   const [user, setUser] = useState(UserModel.null | ErrorModel.null);
   const [activity, setActivity] = useState(ActivityModel.null);
   const [averageSession, setAverageSession] = useState(AverageSessionModel.null);
-  const [performance, setPerformance] = useState(PerformancesModel.null);
+  const [performance, setPerformance] = useState(PerformanceModel.null);
   const { id } = useParams();
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const DashboardPage = () => {
           userService
             .getOneUserPerformanceById(userId) // 12 et 18
             .then(setPerformance)
-            .catch(() => setPerformance(PerformancesModel.null));
+            .catch(() => setPerformance(PerformanceModel.null));
         }
       })
       .catch(() => setUser(UserModel.null));
@@ -68,7 +69,7 @@ const DashboardPage = () => {
           </div>
           <div className={'secondary-graphs'}>
             {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
-            {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
+            {performance && <RadarChartComponent performance={performance} />}
           </div>
         </div>
         {user && (

@@ -1,6 +1,6 @@
-import { PerformanceModel } from './performance-model';
+import { PerformanceDatasModel } from './performance-datas-model';
 
-export class PerformancesModel {
+export class PerformanceModel {
   constructor(performances) {
     const { userId, kind, data } = performances;
     this._userId = userId;
@@ -23,23 +23,23 @@ export class PerformancesModel {
   }
 
   /**
-   * @return {number}
+   * @return {PerformanceDatasModel[]}
    */
-  get performance() {
-    return this._datas.map(data => new PerformanceModel(data));
+  get performances() {
+    return this._datas.map(data => new PerformanceDatasModel(data));
   }
 
   /**
    * Pour transformer les données de l'API en objet
    * @param records
-   * @return {PerformancesModel}
+   * @return {PerformanceModel}
    */
   static mapRecords(records) {
-    return new PerformancesModel(records['data']);
+    return new PerformanceModel(records['data']);
   }
 
   /**
-   * @return {PerformancesModel}
+   * @return {PerformanceModel}
    */
   static get null() {
     return null;

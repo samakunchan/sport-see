@@ -2,7 +2,7 @@ import { ErrorUtil, HttpErrorStatusCode } from '../utils/error-util';
 import { ActivityModel } from '../models/activity/activity-model';
 import { AverageSessionModel } from '../models/average-session/average-session-model';
 import { ErrorModel } from '../models/error-model';
-import { PerformancesModel } from '../models/performances/performances-model';
+import { PerformanceModel } from '../models/performances/performances-model';
 import { UserModel } from '../models/user/user-model';
 
 class UsersService {
@@ -54,13 +54,13 @@ class UsersService {
 
   /**
    * @param id {string} - Id de l'utilisateur venant de l'url.
-   * @return {Promise<PerformancesModel | ErrorModel>} - Les données des performances utilisateur
+   * @return {Promise<PerformanceModel | ErrorModel>} - Les données des performances utilisateur
    * sauf si il y a une érreur.
    */
   getOneUserPerformanceById(id) {
     return fetch(`http://localhost:3005/users/${id}/performance`)
       .then(this._getJson)
-      .then(response => PerformancesModel.mapRecords(response))
+      .then(response => PerformanceModel.mapRecords(response))
       .catch(this._catchErrorAndReturnErrorModel);
   }
 

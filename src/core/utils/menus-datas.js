@@ -1,5 +1,5 @@
-import {SidebarMenuModel} from '../models/sidebar-menu-model';
-import {ToolbarMenuModel} from '../models/toolbar-menu-model';
+import { SidebarMenuModel } from '../models/sidebar-menu-model';
+import { ToolbarMenuModel } from '../models/toolbar-menu-model';
 
 /**
  * Liste des menus en object

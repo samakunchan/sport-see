@@ -1,6 +1,6 @@
 import './index.css';
 import { useEffect, useRef } from 'react';
-import { PerformanceDatasModel } from '../../../core/models/performances/performance-datas-model';
+// import { PerformanceDatasModel } from '../../../core/models/performances/performance-datas-model';
 import { RadarGraphService } from '../../../core/services/radar-graph-service';
 
 /**

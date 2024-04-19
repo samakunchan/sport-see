@@ -69,7 +69,7 @@ const DashboardPage = () => {
           </div>
           <div className={'secondary-graphs'}>
             {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
-            {performance && <h2>Performance de l'utilisateur n°{performance.userId}</h2>}
+            {performance && <RadarChartComponent performance={performance} />}
           </div>
         </div>
         {user && (

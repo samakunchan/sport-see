@@ -11,13 +11,15 @@ export class UserModel {
   /**
    * Crée une instance de UserModel.
    * @constructor
-   * @param {{id: number, userInfos: object, todayScore: number, keyData: object}} user - Les données utilisateur.
+   * @param {{id: number, userInfos: object, todayScore: number, score: number, keyData: object}} user
+   * - Les données utilisateur.
    */
   constructor(user) {
-    const { id, userInfos, todayScore, keyData } = user;
+    const { id, userInfos, todayScore, score, keyData } = user;
     this._id = id;
     this._userInfos = userInfos;
     this._todayScore = todayScore;
+    this._score = score;
     this._keyData = keyData;
   }
 
@@ -39,7 +41,7 @@ export class UserModel {
    * @return {number}
    */
   get todayScore() {
-    return this._todayScore;
+    return this._todayScore ?? this._score;
   }
 
   /**

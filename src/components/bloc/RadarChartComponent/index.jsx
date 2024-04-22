@@ -1,4 +1,4 @@
-import './index.css';
+import './index.scss';
 import { useEffect, useRef } from 'react';
 // import { PerformanceDatasModel } from '../../../core/models/performances/performance-datas-model';
 import { RadarGraphService } from '../../../core/services/radar-graph-service';
@@ -11,9 +11,10 @@ import { RadarGraphService } from '../../../core/services/radar-graph-service';
  */
 const RadarChartComponent = ({ performance }) => {
   const svgRef = useRef();
+
   useEffect(() => {
-    const svgWidth = 400;
-    const svgHeight = 300;
+    const svgWidth = 320;
+    const svgHeight = 320;
     const radarService = new RadarGraphService({ ref: svgRef.current, svgHeight, svgWidth });
     // const datas = [
     //   {
@@ -43,9 +44,10 @@ const RadarChartComponent = ({ performance }) => {
     // ].map(data => new PerformanceDatasModel(data));
     radarService.drawGraph({ performances: performance.performances });
   }, [performance]);
+
   return (
     <div>
-      <svg className={'line-graph'} ref={svgRef}></svg>
+      <svg className={'radar-graph'} ref={svgRef}></svg>
     </div>
   );
 };

@@ -3,19 +3,19 @@ import { useEffect, useState } from 'react';
 import { ActivityModel } from '../../core/models/activity/activity-model';
 import { AverageSessionModel } from '../../core/models/average-session/average-session-model';
 import CardComponent from '../../components/bloc/CardComponent';
-import { ErrorModel } from '../../core/models/error-model';
 import HistogramComponent from '../../components/bloc/HistogramComponent';
 import LineChartComponent from '../../components/bloc/LineChartComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
 import { PerformanceModel } from '../../core/models/performances/performances-model';
 import RadarChartComponent from '../../components/bloc/RadarChartComponent';
+import RadialBarChartComponent from '../../components/bloc/RadialBarChartComponent';
 import TitleComponent from '../../components/bloc/TitleComponent';
 import { UserModel } from '../../core/models/user/user-model';
 import UsersService from '../../core/services/users-service';
 import { useParams } from 'react-router-dom';
 
 const DashboardPage = () => {
-  const [user, setUser] = useState(UserModel.null | ErrorModel.null);
+  const [user, setUser] = useState(UserModel.null);
   const [activity, setActivity] = useState(ActivityModel.null);
   const [averageSession, setAverageSession] = useState(AverageSessionModel.null);
   const [performance, setPerformance] = useState(PerformanceModel.null);
@@ -70,6 +70,7 @@ const DashboardPage = () => {
           <div className={'secondary-graphs'}>
             {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
             {performance && <RadarChartComponent performance={performance} />}
+            {user && <RadialBarChartComponent todayScore={user.todayScore} />}
           </div>
         </div>
         {user && (

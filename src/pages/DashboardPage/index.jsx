@@ -8,6 +8,7 @@ import LineChartComponent from '../../components/bloc/LineChartComponent';
 import NotificationComponent from '../../components/bloc/NotificationComponent';
 import { PerformanceModel } from '../../core/models/performances/performances-model';
 import RadarChartComponent from '../../components/bloc/RadarChartComponent';
+import RadialBarChartComponent from '../../components/bloc/RadialBarChartComponent';
 import TitleComponent from '../../components/bloc/TitleComponent';
 import { UserModel } from '../../core/models/user/user-model';
 import UsersService from '../../core/services/users-service';
@@ -69,6 +70,7 @@ const DashboardPage = () => {
           <div className={'secondary-graphs'}>
             {averageSession && <LineChartComponent sessions={averageSession.sessions} />}
             {performance && <RadarChartComponent performance={performance} />}
+            {user && <RadialBarChartComponent todayScore={user.todayScore} />}
           </div>
         </div>
         {user && (

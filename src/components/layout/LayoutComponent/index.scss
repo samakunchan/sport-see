@@ -1,12 +1,11 @@
 @use "src/styles/abstracts";
 
-.layout-content {
+.layout {
   display: flex;
-  height: 100dvh;
-  position: relative;
-
-  .content {
-    width: 100%;
-    margin: (abstracts.$spaceContent * 2) abstracts.$spaceContent 3em abstracts.$spaceContent;
+  .layout-content {
+    .content {
+      min-height: 90dvh;
+      margin: (abstracts.$spaceContent / 2) abstracts.$spaceContent 0 abstracts.$spaceContent;
+    }
   }
 }

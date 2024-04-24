@@ -1,13 +1,10 @@
 @use "src/styles/abstracts";
 
 header {
-  background-color: abstracts.$secondary;
-  padding: 1em 0;
-  position: absolute;
-  top: 0;
+  background-color: #000000;
+  padding: .75em 0;
   width: 100%;
-  min-height: abstracts.$spaceContent;
-  z-index: 1;
+  min-height: 3.5em;
 
   .top-nav {
     display: flex;

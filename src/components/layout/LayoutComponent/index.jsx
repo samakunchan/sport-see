@@ -2,7 +2,7 @@ import './index.scss';
 import { ErrorUtil, HttpErrorStatusCode } from '../../../core/utils/error-util';
 import React, { useEffect, useState } from 'react';
 import ErrorPage from '../../../pages/ErrorPage';
-import FooterComponent from '../FooterComponent';
+// import FooterComponent from '../FooterComponent';
 import OptionalLinksComponent from '../OptionalLinksComponent';
 import SidebarLayoutComponent from '../SidebarLayoutComponent';
 import ToolbarLayoutComponent from '../ToolbarLayoutComponent';
@@ -17,9 +17,9 @@ const LayoutComponent = ({ children }) => {
   }, []);
 
   return (
-    <div>
+    <>
       <ToolbarLayoutComponent />
-      <main className={'layout-content'}>
+      <main className={'layout'}>
         <SidebarLayoutComponent />
         {status.statusCode !== HttpErrorStatusCode.serverOffline ? (
           <section className={'content'}>
@@ -31,9 +31,8 @@ const LayoutComponent = ({ children }) => {
             <ErrorPage message={ErrorUtil.serverIsOffline} />
           </section>
         )}
-        <FooterComponent />
       </main>
-    </div>
+    </>
   );
 };
 

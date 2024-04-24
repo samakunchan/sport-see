@@ -47,9 +47,14 @@ export class LineGraphService extends GraphService {
     // selection du graph
     const svg = select(this._ref)
       .attr('width', this._svgWidth)
-      .attr('height', this._svgHeight)
+      // .attr('height', this._svgHeight)
       .style('background-color', primaryColor)
-      .style('border-radius', '5px');
+      .style('border-radius', '5px')
+      // Pour le responsive. Un max-width = this._svgWidth et un width = 100%
+      // sur le svg est important dans le fichier css
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      // Pour le responsive aussi. La largueur et hauteur est redéfinis ici
+      .attr('viewBox', `0 0 ${this._svgWidth} ${this._svgHeight}`);
 
     this.histogramTitle({ svg, titleText, secondaryColor });
 
@@ -77,13 +82,15 @@ export class LineGraphService extends GraphService {
       .x(([day]) => x(day))
       .y(([_, sessionLength]) => y(sessionLength));
 
+    // Initialisation du hover
     const bgHoverInit = svg
       .append('rect')
       .attr('class', 'bg-hover')
       .attr('fill', 'rgba(0, 0, 0, 0.10)')
       .attr('width', this._svgWidth)
       .attr('height', this._svgHeight)
-      .style('opacity', 0);
+      .style('opacity', 0)
+      .attr('viewBox', `0 0 ${this._svgWidth} ${this._svgHeight}`);
 
     svg
       .append('defs')
@@ -126,7 +133,7 @@ export class LineGraphService extends GraphService {
 
   /**
    * Ajoute un titre sur l'histogramme
-   * @param svg {MutableRefObject.current} `svg` de l'histogramme
+   * @param svg {MutableRefObject<any>.current} `svg` de l'histogramme
    * @param titleText {string} - Titre
    * @param secondaryColor {string} `rgba(251,251,251,0.70)`
    */
@@ -145,20 +152,20 @@ export class LineGraphService extends GraphService {
       .attr('x', this._margin.right + 20)
       .attr('y', 40)
       .attr('fill', secondaryColor)
+      .attr('class', 'title-line-chart')
       .text(text1)
-      .style('font-size', '20px')
       .style('font-weight', 'bold')
       .append('tspan')
       .attr('x', this._margin.right + 20)
       .attr('dy', 30)
+      .attr('class', 'title-line-chart')
       .text(text2)
-      .style('font-size', '20px')
       .style('font-weight', 'bold');
   }
 
   /**
-   *
-   * @param svg
+   * Evènement hover in et out
+   * @param svg {MutableRefObject<any>.current} `svg` de l'histogramme
    * @param bgHover
    * @param sessions
    * @param x

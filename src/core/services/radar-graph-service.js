@@ -1,4 +1,4 @@
-import { line, lineRadial, max, scaleLinear, select } from 'd3';
+import { line, lineRadial, max, scaleLinear, select, selectAll } from 'd3';
 import { GraphService } from './graph-service';
 
 /**
@@ -32,7 +32,7 @@ export class RadarGraphService extends GraphService {
   drawGraph({ performances }) {
     select(this._ref).selectAll('*').remove();
     const primaryColor = 'rgba(228,26,28,0.80)';
-    const radarSize = Math.min(this._svgWidth, this._svgHeight) / 2 - 50;
+    const radarSize = Math.min(this._svgWidth, this._svgHeight) / 2 - 70;
     const angles = this._getHexagonAngles(RadarGraphService._rotateTo30Degree);
     const scaleRadar = scaleLinear().range([0, radarSize]);
     const translate = `translate(${this._svgWidth / 2}, ${this._svgHeight / 2})`;
@@ -43,9 +43,14 @@ export class RadarGraphService extends GraphService {
 
     const svg = select(this._ref)
       .attr('width', this._svgWidth)
-      .attr('height', this._svgHeight)
+      // .attr('height', this._svgHeight)
       .style('background-color', bgColor)
-      .style('border-radius', '5px');
+      .style('border-radius', '5px')
+      // Pour le responsive. Un max-width = this._svgWidth et un width = 100%
+      // sur le svg est important dans le fichier css
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      // Pour le responsive aussi. La largueur et hauteur est redéfinis ici
+      .attr('viewBox', `0 0 ${this._svgWidth} ${this._svgHeight}`);
 
     this._drawRadar({ svg, angles, radarSize, translate, datasAxesForRadar });
     this._drawLabels({ svg, angles, radarSize, translate, performances });
@@ -62,6 +67,7 @@ export class RadarGraphService extends GraphService {
    * @private
    */
   _drawRadar({ svg, angles, radarSize, translate, datasAxesForRadar }) {
+    selectAll('radar').remove();
     svg
       .selectAll('.radar')
       .data(datasAxesForRadar)
@@ -95,18 +101,18 @@ export class RadarGraphService extends GraphService {
   _drawLabels({ svg, angles, radarSize, translate, performances }) {
     const newDatas = angles.map(angle => ({ axis: '', angle }));
     svg
-      .selectAll('.axis-label')
+      .selectAll('.label-radar-chart')
       .data(newDatas)
       .enter()
       .append('text')
-      .attr('class', 'axis-label')
-      .attr('x', d => radarSize * Math.cos((d.angle * Math.PI) / 180) * 1.4)
-      .attr('y', d => radarSize * Math.sin((d.angle * Math.PI) / 180) * 1.1)
-      .attr('transform', `${translate} scale(1.1)`)
+      .attr('class', 'label-radar-chart')
+      .attr('x', d => radarSize * Math.cos((d.angle * Math.PI) / 180) * 1.5)
+      .attr('y', d => radarSize * Math.sin((d.angle * Math.PI) / 180) * 1.2)
+      .attr('transform', `${translate}`)
       .attr('fill', `white`)
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
-      .merge(svg.selectAll('.axis-label'))
+      .merge(svg.selectAll('.label-radar-chart'))
       .text((d, i) => `${performances[i].label}`);
   }
 

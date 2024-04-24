@@ -1,5 +1,16 @@
+@use "src/styles/abstracts";
+
 .radar-graph {
     max-width: 750px;
-    min-width: 250px;
     width: 100%;
+    @include abstracts.respond-to('medium-large') {
+        max-width: 1024px;
+        min-width: 600px;
+    }
+    .label-radar-chart {
+        @include abstracts.respond-to('medium-large') {
+            font-size: 20px;
+        }
+    }
 }
+

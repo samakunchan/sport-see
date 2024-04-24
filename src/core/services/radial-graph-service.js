@@ -27,9 +27,11 @@ export class RadialGraphService extends GraphService {
 
   drawGraph({ titleText = '', todayScore }) {
     select(this._ref).selectAll('*').remove();
+
     const primaryColor = 'white';
     const secondaryColor = '#fbfbfb';
     const curveColor = '#e41a1c';
+
     const svg = select(this._ref)
       .attr('width', this._svgWidth)
       // .attr('height', this._svgHeight)

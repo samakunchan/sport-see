@@ -54,7 +54,7 @@ export class D3HistogramService extends GraphService {
     const xExtent = extent(poids.map((d, i) => `${i + 1}`));
     const xScale = scaleLinear()
       .domain(xExtent ?? '')
-      .range([this._margin.left, this._svgWidth - this._margin.right - 20]);
+      .range([this._margin.left, this._svgWidth - this._margin.right - 30]);
     const xAxis = axisBottom(xScale)
       .tickSize(0)
       .tickPadding(this._margin.bottom - 20)
@@ -77,7 +77,7 @@ export class D3HistogramService extends GraphService {
       .attr('transform', `translate(0, ${this._svgHeight - this._margin.top})`)
       .attr('font-size', '1rem')
       .select('path')
-      .attr('transform', 'scale(1.05) translate(-11,0)');
+      .attr('transform', 'scale(1.05) translate(-20,0)');
 
     svg
       .append('g')
@@ -108,15 +108,15 @@ export class D3HistogramService extends GraphService {
     // Légendes
     this.histogramLegends({
       svg,
-      positionCircle: this._svgWidth - 190,
-      positionText: this._svgWidth - 180,
+      positionCircle: this._svgWidth - 200,
+      positionText: this._svgWidth - 190,
       color: blackColor,
       titleText: 'Poids (kg)',
     });
     this.histogramLegends({
       svg,
-      positionCircle: this._svgWidth - 100,
-      positionText: this._svgWidth - 90,
+      positionCircle: this._svgWidth - 90,
+      positionText: this._svgWidth - 80,
       color: primaryColor,
       titleText: 'Calories brûlées (kCal)',
     });
@@ -130,7 +130,7 @@ export class D3HistogramService extends GraphService {
       .attr('class', (d, i) => `g-hover-${i}`)
       .attr(
         'transform',
-        (d, i) => `translate(${xScale(i) + this._margin.left + this._margin.right - 30}, 70)`,
+        (d, i) => `translate(${xScale(i) + this._margin.left + this._margin.right + 5}, 70)`,
       )
       .each((d, index, nodes) => {
         const selection = select(nodes[index]);
@@ -144,7 +144,11 @@ export class D3HistogramService extends GraphService {
         selection
           .append('rect')
           .attr('class', () => `g-bg-red`)
-          .attr('transform', (d, i) => `translate(${xScale(i) + 120}, 10)`)
+          .attr('transform', (d, i) =>
+            index === poids.length - 1
+              ? `translate(${xScale(i) + 45}, 0)`
+              : `translate(${xScale(i) + 170}, 0)`,
+          )
           .attr('width', () => `60px`)
           .attr('height', `70px`)
           .attr('fill', 'transparent');
@@ -153,7 +157,11 @@ export class D3HistogramService extends GraphService {
           .append('text')
           .attr('class', () => `g-text-kg`)
           .text(d => `${d}Kg`)
-          .attr('transform', (d, i) => `translate(${xScale(i) + 150}, 30)`)
+          .attr('transform', (d, i) =>
+            index === poids.length - 1
+              ? `translate(${xScale(i) + 75}, 25)`
+              : `translate(${xScale(i) + 200}, 25)`,
+          )
           .attr('text-anchor', 'middle')
           .attr('font-size', '12px')
           .attr('fill', 'transparent');
@@ -162,7 +170,11 @@ export class D3HistogramService extends GraphService {
           .append('text')
           .attr('class', () => `g-text-cal`)
           .text(() => `${calories[index]}Kcal`)
-          .attr('transform', (d, i) => `translate(${xScale(i) + 150}, 60)`)
+          .attr('transform', (d, i) =>
+            index === poids.length - 1
+              ? `translate(${xScale(i) + 75}, 55)`
+              : `translate(${xScale(i) + 200}, 55)`,
+          )
           .attr('text-anchor', 'middle')
           .attr('font-size', '12px')
           .attr('fill', 'transparent');
@@ -227,10 +239,11 @@ export class D3HistogramService extends GraphService {
   histogramTitle({ svg, titleText }) {
     svg
       .append('text')
-      .attr('x', this._margin.right)
+      .attr('x', this._margin.right - 40)
       .attr('y', 38)
+      .attr('class', 'title-histogram')
       .text(titleText)
-      .style('font-weight', '500');
+      .style('font-weight', 'bold');
   }
 
   /**
@@ -249,15 +262,16 @@ export class D3HistogramService extends GraphService {
       .append('circle')
       .attr('cx', positionCircle)
       .attr('cy', 30)
-      .attr('r', 5)
+      // .attr('r', 5)
+      .attr('class', 'circle')
       .attr('fill', color);
     legend
       .append('text')
       .text(titleText)
       .attr('dx', positionText)
       .attr('dy', 35)
-      .attr('fill', '#74798C')
-      .style('font-size', '14px');
+      .attr('class', 'legend')
+      .attr('fill', '#74798C');
   }
 
   /**
@@ -330,7 +344,7 @@ export class D3HistogramService extends GraphService {
       .attr('class', 'g-rect')
       .attr(
         'transform',
-        (d, i) => `translate(${xScale(i) + this._margin.left + this._margin.right - 30}, 70)`,
+        (d, i) => `translate(${xScale(i) + this._margin.left + this._margin.right + 5}, 70)`,
       )
       .attr('height', `${this._svgHeight + this._margin.bottom - 190}px`)
       .attr('width', () => `65px`)

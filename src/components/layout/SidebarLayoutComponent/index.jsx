@@ -21,6 +21,9 @@ const SidebarLayoutComponent = () => {
   return (
     <nav className={'side-nav'}>
       <ul>{sideBarMenusDatas.map(buildMenu)}</ul>
+      <div className={'footer'}>
+        <p>Copyright, SportSee 2024</p>
+      </div>
     </nav>
   );
 };

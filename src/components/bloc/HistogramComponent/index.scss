@@ -3,7 +3,30 @@
 .histogram-container {
   .histogram {
     background-color: abstracts.$cardColor;
-    max-width: 750px;
+    max-width: 1024px;
+    min-width: 200px;
     width: 100%;
+    .title-histogram {
+      font-size: 20px;
+      @include abstracts.respond-to('medium-large') {
+        font-size: 25px;
+      }
+    }
+
+    .legend {
+      font-size: 14px;
+      @include abstracts.respond-to('medium-large') {
+        font-size: 20px;
+      }
+    }
+
+    .circle {
+      r: 5px;
+      @include abstracts.respond-to('medium-large') {
+        r: 6px;
+      }
+    }
   }
 }
+
+

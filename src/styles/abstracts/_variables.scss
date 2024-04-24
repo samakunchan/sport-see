@@ -19,6 +19,7 @@ $fontMSourceCodePro: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', mo
 $breakpoints: (
         'small': (max-width: 768px),
         'medium': (max-width: 1024px),
+        'medium-large': (max-width: 1280px),
         'large': (max-width: 1440px),
 );
 

@@ -1,6 +1,6 @@
 import './index.scss';
 import { useEffect, useRef } from 'react';
-import { PerformanceDatasModel } from '../../../core/models/performances/performance-datas-model';
+// import { PerformanceDatasModel } from '../../../core/models/performances/performance-datas-model';
 import { RadarGraphService } from '../../../core/services/radar-graph-service';
 import useScreenSize from '../../../core/utils/use-screen-size';
 

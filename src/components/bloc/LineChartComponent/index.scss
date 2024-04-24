@@ -1,0 +1,17 @@
+@use "src/styles/abstracts";
+
+.line-graph {
+  max-width: 750px;
+  width: 100%;
+  @include abstracts.respond-to('medium-large') {
+    max-width: 1024px;
+    min-width: 600px;
+  }
+  .title-line-chart {
+    font-size: 20px;
+    @include abstracts.respond-to('medium-large') {
+      font-size: 25px;
+    }
+  }
+}
+

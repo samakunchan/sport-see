@@ -14,8 +14,9 @@ const HistogramComponent = ({ poids, calories }) => {
   const svgRef = useRef();
   const titleText = 'Activité quotidienne';
   useEffect(() => {
-    const svgWidth = 750;
+    const svgWidth = 1024;
     const svgHeight = 350;
+
     const d3HistogramService = new D3HistogramService({ ref: svgRef.current, svgWidth, svgHeight });
     d3HistogramService.drawGraph({ poids, calories, titleText });
   }, [poids, calories, titleText]);

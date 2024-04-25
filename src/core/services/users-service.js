@@ -18,7 +18,7 @@ class UsersService {
 
   /**
    * @param id {string} - Id de l'utilisateur venant de l'url
-   * @return {Promise<UserModel>} - Les données utilisateur
+   * @return {Promise<UserModel> | Promise<ErrorModel>} - Les données utilisateur
    * sauf si il y a une érreur
    */
   getOneUserById(id) {

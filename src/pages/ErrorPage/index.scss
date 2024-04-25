@@ -1,2 +1,7 @@
 @use "src/styles/abstracts";
 
+.case-error {
+  li {
+    list-style: initial;
+  }
+}

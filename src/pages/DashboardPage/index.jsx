@@ -1,4 +1,10 @@
 import './index.scss';
+// import {
+//   fakeActivity,
+//   fakeAverageSession,
+//   fakePerformance,
+//   fakeUser,
+// } from '../../core/utils/fake-datas';
 import { useEffect, useState } from 'react';
 import { ActivityModel } from '../../core/models/activity/activity-model';
 import { AverageSessionModel } from '../../core/models/average-session/average-session-model';

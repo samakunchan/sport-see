@@ -1,4 +1,4 @@
-import { axisBottom, axisRight, extent, local, max, min, scaleLinear, select } from 'd3';
+import { axisBottom, axisRight, extent, local, max, scaleLinear, select } from 'd3';
 import { GraphService } from './graph-service';
 
 /**
@@ -8,7 +8,7 @@ import { GraphService } from './graph-service';
  * @param svgHeight {number} Hauteur du graph
  * @class
  */
-export class D3HistogramService extends GraphService {
+export class BarGraphService extends GraphService {
   /**
    * @param ref {MutableRefObject<undefined>.current} - `svgRef.current`. Référence du graph
    * @param svgWidth {number} Largeur du graph
@@ -29,14 +29,11 @@ export class D3HistogramService extends GraphService {
   drawGraph({ poids, calories, titleText = '' }) {
     select(this._ref).selectAll('*').remove();
 
-    const minPoids = Number(min(poids));
-    const maxPoids = Number(max(poids));
     const maxCalories = Number(max(calories));
-    const gapPoids = maxPoids - minPoids;
-    const gap = gapPoids > 2 ? 12.5 : 11.2;
     const primaryColor = '#e41a1c';
     const blackColor = '#000000';
     const cardColor = '#fbfbfb';
+    const gap = 3;
 
     // selection du graph
     const svg = select(this._ref)
@@ -61,15 +58,23 @@ export class D3HistogramService extends GraphService {
       .ticks(7);
 
     // Y axis
+    const yExtent = extent(poids);
+    const moitierDeY = Math.trunc((yExtent[0] + yExtent[1]) / 2);
     const yScale = scaleLinear()
-      .domain([maxPoids - gap, maxPoids + 3])
+      .domain([moitierDeY - gap, moitierDeY + gap])
       .range([this._svgHeight - this._margin.top, this._margin.top]);
 
     const yCaloriesScale = scaleLinear()
       .domain([0, maxCalories])
       .range([0, this._svgHeight / 2]);
 
-    const yAxis = axisRight(yScale).ticks(3).tickSize(0).tickPadding(30);
+    const tickValues = [moitierDeY - gap, moitierDeY, moitierDeY + gap];
+    const yAxis = axisRight(yScale)
+      .ticks(3)
+      .tickSize(0)
+      .tickPadding(30)
+      .tickValues(tickValues)
+      .tickFormat(d => `${d}`);
 
     svg
       .append('g')
@@ -82,7 +87,7 @@ export class D3HistogramService extends GraphService {
     svg
       .append('g')
       .call(yAxis)
-      .attr('transform', `translate(${this._svgWidth - this._margin.right}, 17)`) // Bouge les chiffres de l'ordonnée
+      .attr('transform', `translate(${this._svgWidth - this._margin.right}, 0)`) // Bouge les chiffres de l'ordonnée
       .attr('font-size', '1rem')
       .select('.domain')
       .remove();
@@ -91,13 +96,13 @@ export class D3HistogramService extends GraphService {
     const yAxisGrid = axisRight(yScale)
       .tickSize(-(this._svgWidth - this._margin.left - this._margin.right) - 20)
       .ticks(3)
-      .tickFormat(() => '');
-
+      .tickValues(tickValues)
+      .tickFormat(d => ``);
     svg
       .append('g')
       .style('stroke-dasharray', '3, 3')
       .style('color', 'lightgray')
-      .attr('transform', `translate(${this._svgWidth - this._margin.right}, 17)`) // Bouge les pointillés de l'ordonnée
+      .attr('transform', `translate(${this._svgWidth - this._margin.right}, 0)`) // Bouge les pointillés de l'ordonnée
       .call(yAxisGrid)
       .select('path')
       .remove();
@@ -302,7 +307,7 @@ export class D3HistogramService extends GraphService {
       .transition()
       .duration(700)
       .attr('y2', d =>
-        type === 'calories' ? height - configuration.yScale(d) + 20 : configuration.yScale(d) + 20,
+        type === 'calories' ? height - configuration.yScale(d) + 20 : configuration.yScale(d) + 2,
       );
 
     // Bar rectangulaire
@@ -319,7 +324,7 @@ export class D3HistogramService extends GraphService {
       .transition()
       .duration(700)
       .attr('y2', d =>
-        type === 'calories' ? height - configuration.yScale(d) + 20 : configuration.yScale(d) + 20,
+        type === 'calories' ? height - configuration.yScale(d) + 20 : configuration.yScale(d) + 2,
       )
       .attr('stroke', color)
       .attr('stroke-width', '8')

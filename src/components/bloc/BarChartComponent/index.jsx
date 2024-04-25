@@ -1,23 +1,23 @@
 import './index.scss';
 import PropTypes, { number } from 'prop-types';
 import { useEffect, useRef } from 'react';
-import { D3HistogramService } from '../../../core/services/d3-histogram-service';
+import { BarGraphService } from '../../../core/services/bar-graph-service';
 
 /**
- * Créer le composant HistogramComponent
+ * Créer le composant BarChartComponent
  * @param poids {number[]}
  * @param calories {number[]}
  * @return {JSX.Element}
  * @constructor
  */
-const HistogramComponent = ({ poids, calories }) => {
+const BarChartComponent = ({ poids, calories }) => {
   const svgRef = useRef();
   const titleText = 'Activité quotidienne';
   useEffect(() => {
     const svgWidth = 1024;
     const svgHeight = 350;
 
-    const d3HistogramService = new D3HistogramService({ ref: svgRef.current, svgWidth, svgHeight });
+    const d3HistogramService = new BarGraphService({ ref: svgRef.current, svgWidth, svgHeight });
     d3HistogramService.drawGraph({ poids, calories, titleText });
   }, [poids, calories, titleText]);
 
@@ -28,9 +28,9 @@ const HistogramComponent = ({ poids, calories }) => {
   );
 };
 
-HistogramComponent.propType = {
+BarChartComponent.propType = {
   datas1: PropTypes.arrayOf(number).isRequired,
   datas2: PropTypes.arrayOf(number).isRequired,
 };
 
-export default HistogramComponent;
+export default BarChartComponent;

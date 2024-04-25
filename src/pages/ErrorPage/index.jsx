@@ -1,4 +1,5 @@
 import './index.scss';
+import { ErrorUtil } from '../../core/utils/error-util';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -12,7 +13,22 @@ import React from 'react';
  * @constructor
  */
 const ErrorPage = ({ message }) => {
-  return <h1>{message}</h1>;
+  return (
+    <>
+      {message === ErrorUtil.messageNotFound ? (
+        <>
+          <h1>{message}</h1>
+          <p>Possibilités : </p>
+          <ul className={'case-error'}>
+            <li>L'utilisateur n'existe pas.</li>
+            <li>J'ai remplacé les endpoints de l'API (voir documentation).</li>
+          </ul>
+        </>
+      ) : (
+        <h1>{message}</h1>
+      )}
+    </>
+  );
 };
 
 ErrorPage.propTypes = {

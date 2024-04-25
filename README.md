@@ -12,6 +12,14 @@ ainsi que le nombre de calories brûlées.
 <br>
 (NB : La maquette peut évoluer avec le temps.)
 
+## Informations importantes
+
+De légère modification ont été ajouter à l'API. 
+
+- Une route pour avoir tout les utilisateurs ont été créés.
+- Les endpoints ont été modifiés : `/user` => `/users`
+- Le port à écouter est : `3005`
+
 ## Installation
 
 1. Repo public

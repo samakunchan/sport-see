@@ -11,7 +11,9 @@ export class UserModel {
   /**
    * Crée une instance de UserModel.
    * @constructor
-   * @param {{id: number, userInfos: object, todayScore: number, score: number, keyData: object}} user
+   * @param {{todayScore: number,
+   * keyData: {proteinCount: number, calorieCount: number, carbohydrateCount: number},
+   * userInfos: {firstName: string, lastName: string, age: number}, id: number}} user
    * - Les données utilisateur.
    */
   constructor(user) {

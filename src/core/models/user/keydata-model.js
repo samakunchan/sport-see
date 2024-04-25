@@ -31,27 +31,27 @@ export class KeydataModel {
    * @return {string}
    */
   get calorieCount() {
-    return `${(this._calorieCount / 1000).toFixed(3)}kCal`;
+    return !!this._calorieCount ? `${(this._calorieCount / 1000).toFixed(3)}kCal` : `Non définis`;
   }
 
   /**
    * @return {string}
    */
   get proteinCount() {
-    return `${this._proteinCount}g`;
+    return !!this._proteinCount ? `${this._proteinCount}g` : `Non définis`;
   }
 
   /**
    * @return {string}
    */
   get carbohydrateCount() {
-    return `${this._carbohydrateCount}g`;
+    return !!this._carbohydrateCount ? `${this._carbohydrateCount}g` : `Non définis`;
   }
 
   /**
    * @return {string}
    */
   get lipidCount() {
-    return `${this._lipidCount}g`;
+    return !!this._lipidCount ? `${this._lipidCount}g` : `Non définis`;
   }
 }

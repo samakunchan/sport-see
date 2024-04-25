@@ -9,9 +9,12 @@ import React from 'react';
  */
 const OptionalLinksComponent = () => {
   return (
-    <div>
-      <Link to={'/user/12'}>Karl</Link>
-      <Link to={'/user/18'}>Cécilia</Link>
+    <div className={'optional-links'}>
+      <h1>Projet 13 - OpenClassroom</h1>
+      <div className={'links'}>
+        <Link to={'/user/12'}>Tableau de bord de Karl</Link>
+        <Link to={'/user/18'}>Tableau de bord de Cécilia</Link>
+      </div>
     </div>
   );
 };

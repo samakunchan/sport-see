@@ -1,7 +1,10 @@
 import './index.scss';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
+import ErrorPage from './pages/ErrorPage';
+import { ErrorUtil } from './core/utils/error-util';
 import LayoutComponent from './components/layout/LayoutComponent';
+import OptionalLinksComponent from './components/layout/OptionalLinksComponent';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
@@ -12,7 +15,13 @@ root.render(
     <Router>
       <LayoutComponent>
         <Routes>
+          <Route path='/' element={<OptionalLinksComponent />} />
           <Route path='/user/:id' element={<DashboardPage />} />
+          <Route
+            path='/user/page-introuvable'
+            element={<ErrorPage message={ErrorUtil.messageNotFound} />}
+          />
+          <Route path='*' element={<Navigate to={'/user/page-introuvable'} replace />} />
         </Routes>
       </LayoutComponent>
     </Router>

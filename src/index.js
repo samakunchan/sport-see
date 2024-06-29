@@ -8,11 +8,12 @@ import OptionalLinksComponent from './components/layout/OptionalLinksComponent';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
+import { RouteName } from './core/utils/utils';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <Router>
+    <Router basename={RouteName.basePath}>
       <LayoutComponent>
         <Routes>
           <Route path='/' element={<OptionalLinksComponent />} />

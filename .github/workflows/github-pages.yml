@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - 'developpement'
+      - 'fix'
 
 name: 🚀 [PUSH] Workflow pour le build et le deploiement vers github pages
 jobs:
@@ -25,7 +26,7 @@ jobs:
 
       - name: 🔨 Construction du projet
         run: |
-          npm run build
+          npm run build-prod
 
       - name: 🛂 Deploiement du projet
         run: |

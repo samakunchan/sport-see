@@ -1,4 +1,5 @@
 import { MenuBase } from './bases/menu-base';
+import { RouteName } from '../utils/utils';
 
 /**
  * Crée une instance de menu de la sidebar hérité de {MenuBase}.
@@ -22,7 +23,7 @@ export class SidebarMenuModel extends MenuBase {
    * @return {string}
    */
   get iconeSrc() {
-    return `/sport-see/assets/svg/${this._icone}.svg`;
+    return `${RouteName.basePath}/assets/svg/${this._icone}.svg`;
   }
 
   /**

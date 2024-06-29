@@ -31,30 +31,3 @@ const RadarChartComponent = ({ performance }) => {
 };
 
 export default RadarChartComponent;
-
-// const datas = [
-//   {
-//     value: 80,
-//     kind: 1,
-//   },
-//   {
-//     value: 120,
-//     kind: 2,
-//   },
-//   {
-//     value: 140,
-//     kind: 3,
-//   },
-//   {
-//     value: 50,
-//     kind: 4,
-//   },
-//   {
-//     value: 200,
-//     kind: 5,
-//   },
-//   {
-//     value: 90,
-//     kind: 6,
-//   },
-// ].map(data => new PerformanceDatasModel(data));

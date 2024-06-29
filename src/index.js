@@ -19,7 +19,7 @@ root.render(
           <Route path={'/'} element={<OptionalLinksComponent />} />
           <Route path={`/user/:id`} element={<DashboardPage />} />
           <Route
-            path={`}/user/page-introuvable`}
+            path={`/user/page-introuvable`}
             element={<ErrorPage message={ErrorUtil.messageNotFound} />}
           />
           <Route path='*' element={<Navigate to={`/user/page-introuvable`} replace />} />

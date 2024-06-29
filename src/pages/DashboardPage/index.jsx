@@ -18,9 +18,16 @@ import NotificationComponent from '../../components/bloc/NotificationComponent';
 import { PerformanceModel } from '../../core/models/performances/performances-model';
 import RadarChartComponent from '../../components/bloc/RadarChartComponent';
 import RadialBarChartComponent from '../../components/bloc/RadialBarChartComponent';
+import { RouteName } from '../../core/utils/utils';
 import TitleComponent from '../../components/bloc/TitleComponent';
 import { UserModel } from '../../core/models/user/user-model';
 import UsersService from '../../core/services/users-service';
+import {
+  fakeActivity,
+  fakeAverageSession,
+  fakePerformance,
+  fakeUser,
+} from '../../core/utils/fake-datas';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(UserModel.null | ErrorModel.null);
@@ -31,39 +38,46 @@ const DashboardPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userService = new UsersService();
-    userService
-      .getOneUserById(id) // 12 et 18
-      .then(userDatas => {
-        setUser(userDatas);
-        return userDatas;
-      })
-      .then(userDatas => {
-        if (userDatas !== undefined && userDatas instanceof UserModel) {
-          const userId = userDatas.id.toString();
-          userService
-            .getOneUserActivityById(userId) // 12 et 18
-            .then(setActivity)
-            .catch(() => setActivity(ActivityModel.null));
+    if (process.env['REACT_APP_MOCK'] === 'true') {
+      setUser(fakeUser);
+      setActivity(fakeActivity);
+      setAverageSession(fakeAverageSession);
+      setPerformance(fakePerformance);
+    } else {
+      const userService = new UsersService();
+      userService
+        .getOneUserById(id) // 12 et 18
+        .then(userDatas => {
+          setUser(userDatas);
+          return userDatas;
+        })
+        .then(userDatas => {
+          if (userDatas !== undefined && userDatas instanceof UserModel) {
+            const userId = userDatas.id.toString();
+            userService
+              .getOneUserActivityById(userId) // 12 et 18
+              .then(setActivity)
+              .catch(() => setActivity(ActivityModel.null));
 
-          userService
-            .getOneUserAverageSessionById(userId) // 12 et 18
-            .then(setAverageSession)
-            .catch(() => setAverageSession(AverageSessionModel.null));
+            userService
+              .getOneUserAverageSessionById(userId) // 12 et 18
+              .then(setAverageSession)
+              .catch(() => setAverageSession(AverageSessionModel.null));
 
-          userService
-            .getOneUserPerformanceById(userId) // 12 et 18
-            .then(setPerformance)
-            .catch(() => setPerformance(PerformanceModel.null));
-        }
-      })
-      .catch(error => {
-        if (error instanceof ErrorModel && error.statusCode === HttpErrorStatusCode.notFound) {
-          navigate('/error');
-        }
+            userService
+              .getOneUserPerformanceById(userId) // 12 et 18
+              .then(setPerformance)
+              .catch(() => setPerformance(PerformanceModel.null));
+          }
+        })
+        .catch(error => {
+          if (error instanceof ErrorModel && error.statusCode === HttpErrorStatusCode.notFound) {
+            navigate('/error');
+          }
 
-        return setUser(UserModel.null);
-      });
+          return setUser(UserModel.null);
+        });
+    }
   }, [id, navigate]);
 
   return (
@@ -92,22 +106,22 @@ const DashboardPage = () => {
             </div>
             <aside>
               <CardComponent
-                src={'/sport-see/assets/svg/calories-icon.svg'}
+                src={`${RouteName.basePath}/assets/svg/calories-icon.svg`}
                 title={'Calories'}
                 data={user.keyData.calorieCount}
               />
               <CardComponent
-                src={'/sport-see/assets/svg/protein-icon.svg'}
+                src={`${RouteName.basePath}/assets/svg/protein-icon.svg`}
                 title={'Protéines'}
                 data={user.keyData.proteinCount}
               />
               <CardComponent
-                src={'/sport-see/assets/svg/carbs-icon.svg'}
+                src={`${RouteName.basePath}/assets/svg/carbs-icon.svg`}
                 title={'Glucides'}
                 data={user.keyData.carbohydrateCount}
               />
               <CardComponent
-                src={'/sport-see/assets/svg/fat-icon.svg'}
+                src={`${RouteName.basePath}/assets/svg/fat-icon.svg`}
                 title={'Lipides'}
                 data={user.keyData.lipidCount}
               />

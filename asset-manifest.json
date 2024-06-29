@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.434878a0.css",
-    "main.js": "/static/js/main.ffcf5815.js",
-    "static/js/453.1b70be85.chunk.js": "/static/js/453.1b70be85.chunk.js",
-    "static/media/logo.png": "/static/media/logo.e2fa355fbdb9799f84e3.png",
-    "index.html": "/index.html",
-    "main.434878a0.css.map": "/static/css/main.434878a0.css.map",
-    "main.ffcf5815.js.map": "/static/js/main.ffcf5815.js.map",
-    "453.1b70be85.chunk.js.map": "/static/js/453.1b70be85.chunk.js.map"
+    "main.css": "/sport-see/static/css/main.434878a0.css",
+    "main.js": "/sport-see/static/js/main.9cb9346e.js",
+    "static/js/453.1b70be85.chunk.js": "/sport-see/static/js/453.1b70be85.chunk.js",
+    "static/media/logo.png": "/sport-see/static/media/logo.e2fa355fbdb9799f84e3.png",
+    "index.html": "/sport-see/index.html",
+    "main.434878a0.css.map": "/sport-see/static/css/main.434878a0.css.map",
+    "main.9cb9346e.js.map": "/sport-see/static/js/main.9cb9346e.js.map",
+    "453.1b70be85.chunk.js.map": "/sport-see/static/js/453.1b70be85.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.434878a0.css",
-    "static/js/main.ffcf5815.js"
+    "static/js/main.9cb9346e.js"
   ]
 }

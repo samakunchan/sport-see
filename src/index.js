@@ -8,20 +8,21 @@ import OptionalLinksComponent from './components/layout/OptionalLinksComponent';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
+import { RouteName } from './core/utils/utils';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <Router>
+    <Router basename={RouteName.basePath}>
       <LayoutComponent>
         <Routes>
-          <Route path='/' element={<OptionalLinksComponent />} />
-          <Route path='/user/:id' element={<DashboardPage />} />
+          <Route path={'/'} element={<OptionalLinksComponent />} />
+          <Route path={`/user/:id`} element={<DashboardPage />} />
           <Route
-            path='/user/page-introuvable'
+            path={`/user/page-introuvable`}
             element={<ErrorPage message={ErrorUtil.messageNotFound} />}
           />
-          <Route path='*' element={<Navigate to={'/user/page-introuvable'} replace />} />
+          <Route path='*' element={<Navigate to={`/user/page-introuvable`} replace />} />
         </Routes>
       </LayoutComponent>
     </Router>

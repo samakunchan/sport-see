@@ -31,6 +31,10 @@ De légère modification ont été ajouter à l'API.
         git clone https://<ACCESS_TOKEN>@github.com/samakunchan/sport-see
         npm install
 
+## Fake Datas
+
+Le fichier `.env` contient une variable afin de pouvoir activer plus facilement les mocks.
+
 ## Test
 
 Voir les rôles pour les tests ici : https://www.w3.org/TR/html-aria/#docconformance

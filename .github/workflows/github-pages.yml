@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - 'developpement'
+      - 'fix'
 
 name: 🚀 [PUSH] Workflow pour le build et le deploiement vers github pages
 jobs:

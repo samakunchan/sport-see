@@ -16,13 +16,19 @@ root.render(
     <Router basename={RouteName.basePath}>
       <LayoutComponent>
         <Routes>
-          <Route path='/' element={<OptionalLinksComponent />} />
-          <Route path='/user/:id' element={<DashboardPage />} />
           <Route
-            path='/user/page-introuvable'
+            path={process.env.REACT_APP_ENV === 'gh-pages' ? RouteName.basePath : '/'}
+            element={<OptionalLinksComponent />}
+          />
+          <Route path={`${RouteName.basePath}/user/:id`} element={<DashboardPage />} />
+          <Route
+            path={`${RouteName.basePath}/user/page-introuvable`}
             element={<ErrorPage message={ErrorUtil.messageNotFound} />}
           />
-          <Route path='*' element={<Navigate to={'/user/page-introuvable'} replace />} />
+          <Route
+            path='*'
+            element={<Navigate to={`${RouteName.basePath}/user/page-introuvable`} replace />}
+          />
         </Routes>
       </LayoutComponent>
     </Router>
